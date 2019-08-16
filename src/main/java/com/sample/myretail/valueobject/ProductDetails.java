@@ -1,4 +1,4 @@
-package com.sample.myretail.valueobjects;
+package com.sample.myretail.valueobject;
 
 /**
  * This is the Product details class which has all the product properties

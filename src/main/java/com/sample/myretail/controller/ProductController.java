@@ -2,7 +2,7 @@ package com.sample.myretail.controller;
 
 import com.sample.myretail.repository.Product;
 import com.sample.myretail.service.ProductService;
-import com.sample.myretail.valueobjects.ProductDetails;
+import com.sample.myretail.valueobject.ProductDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

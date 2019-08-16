@@ -6,7 +6,7 @@ import com.sample.myretail.MyRetailSpringConfigTest;
 import com.sample.myretail.repository.Product;
 import com.sample.myretail.repository.ProductRepository;
 import com.sample.myretail.service.RedskyService;
-import com.sample.myretail.valueobjects.ProductDetails;
+import com.sample.myretail.valueobject.ProductDetails;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

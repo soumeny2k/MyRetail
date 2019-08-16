@@ -2,7 +2,7 @@ package com.sample.myretail.service;
 
 import com.sample.myretail.repository.Product;
 import com.sample.myretail.repository.ProductRepository;
-import com.sample.myretail.valueobjects.ProductDetails;
+import com.sample.myretail.valueobject.ProductDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CachePut;
