@@ -26,11 +26,6 @@ Build an application that performs the following actions:
 ## Windows:
 ```gradlew clean build```
 
-## Run as Standalone:
-Use below command to run it as standalone application. This will require MongoDB to be running in your system at port 27017.
-
-```java -jar build/libs/MyRetail.jar```
-
 ## Install Docker:
 Follow below link to install docker.
 
@@ -44,7 +39,13 @@ After gradle build completed run below Docker command to make image of the artif
 
 ```docker build .```
 
-## Run with Docker Compose:
+# Run:
+## Standalone:
+Use below command to run it as standalone application. This will require MongoDB to be running in your system at port 27017.
+
+```java -jar build/libs/MyRetail.jar```
+
+## Docker Compose:
 To run project using docker compose use below commands. This will run both MongoDB image and the MyRetail application image together.
 
 ```docker-compose up```
