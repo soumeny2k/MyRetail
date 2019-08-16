@@ -5,7 +5,6 @@ import com.sample.myretail.service.ProductService;
 import com.sample.myretail.valueobjects.ProductDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +19,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class ProductController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
+    private final ProductService productService;
 
-    @Autowired
-    private ProductService productService;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
+    }
 
     /**
      * This service will take productId as path variable and  return the product details for that id

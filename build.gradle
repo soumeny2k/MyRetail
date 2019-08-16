@@ -39,14 +39,8 @@ jacocoTestCoverageVerification {
         // See http://www.eclemma.org/jacoco/trunk/doc/counters.html for a description of the counters
         rule {
             limit {
-                counter = 'BRANCH'
-                minimum = 0.4
-            }
-        }
-        rule {
-            limit {
                 counter = 'LINE'
-                minimum = 0.8
+                minimum = 0.6
             }
         }
         rule {
