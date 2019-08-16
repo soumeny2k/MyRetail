@@ -46,8 +46,13 @@ Use below command to run it as standalone application. This will require MongoDB
 ```java -jar build/libs/MyRetail.jar```
 
 ## Docker Compose:
-To run project using docker compose use below commands. This will run both MongoDB image and the MyRetail application image together.
+Below command will run application using docker compose. This will run both MongoDB image and the MyRetail application image together.
 
 ```docker-compose up```
+
+# Test:
+To test API using Swagger UI access below url when application is successfully started.
+
+```http://localhost:8082/swagger-ui.html```
 
 
