@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+/**
+ * Controller class for Product, which has all the product related Rest services
+ */
 @RestController
 @RequestMapping(value = "/products")
 public class ProductController {
@@ -21,6 +24,14 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    /**
+     * This service will take productId as path variable and  return the product details for that id
+     *
+     * @param id product id
+     * @return If found then details of the specified product with HTTP Status OK
+     *         If the product not found then it will return HTTP Status NOT_FOUND
+     *         If any error occurred then it will return HTTP Status INTERNAL_SERVER_ERROR
+     */
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductDetails> get(@PathVariable Long id) {
         try {
@@ -36,6 +47,15 @@ public class ProductController {
         }
     }
 
+    /**
+     *  This service will take productId and product details and update the product rice in DB
+     *
+     * @param id product id
+     * @param productDetails product details
+     * @return If updated then details of the updated product with HTTP Status OK
+     *         If the product not found then it will return HTTP Status NOT_FOUND
+     *         If any error occurred then it will return HTTP Status INTERNAL_SERVER_ERROR
+     */
     @PutMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductDetails> update(@PathVariable Long id, @RequestBody ProductDetails productDetails) {
         try {
@@ -49,8 +69,8 @@ public class ProductController {
 
             productDetails.setCurrent_price(new ProductDetails.CurrentPrice(product.getValue(), product.getCurrencyCode()));
             return ResponseEntity.ok(productDetails);
-        } catch (Exception e) {
-            LOGGER.error("Error updating product price:", e);
+        } catch (Exception ex) {
+            LOGGER.error("Error updating product price:", ex);
             return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
         }
     }

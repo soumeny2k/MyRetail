@@ -1,7 +1,7 @@
 package com.sample.myretail.service;
 
 import com.sample.myretail.MyRetailSpringConfigTest;
-import com.sample.myretail.config.ProductConfig;
+import com.sample.myretail.config.MyRetailConfig;
 import com.sample.myretail.valueobjects.ProductDetails;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class RedskyServiceTest {
     private RestTemplate restTemplate;
 
     @MockBean
-    private ProductConfig productConfig;
+    private MyRetailConfig productConfig;
 
     @Rule
     public ExpectedException exceptionRule = ExpectedException.none();

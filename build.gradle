@@ -20,6 +20,8 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-cache', version: '2.1.7.RELEASE'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.1.2.RELEASE'
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.6'
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 
     testCompile group: 'org.mockito', name: 'mockito-core', version: '2.28.2'
     testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.2'

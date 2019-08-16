@@ -2,10 +2,12 @@ package com.sample.myretail.repository;
 
 import org.springframework.data.annotation.Id;
 
+/**
+ * This is the pojo which represents the DB entity in MongoDB
+ */
 public class Product {
     @Id
     private long id;
-
     private double value;
     private String currencyCode;
 

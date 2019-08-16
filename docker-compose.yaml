@@ -1,6 +1,6 @@
 version: '2'
 services:
-  myRetail:
+  myretail:
     build: .
     environment:
       - server_port=8082

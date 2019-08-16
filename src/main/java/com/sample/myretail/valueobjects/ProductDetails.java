@@ -1,5 +1,8 @@
 package com.sample.myretail.valueobjects;
 
+/**
+ * This is the Product details class which has all the product properties
+ */
 @SuppressWarnings({"PMD.VariableNamingConventions", "PMD.MethodNamingConventions"})
 public class ProductDetails {
     private long id;

@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Optional;
 
+/**
+ * This class represents the service for product operation
+ */
 @Service
 public class ProductService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
@@ -31,6 +34,15 @@ public class ProductService {
         this.redskyService = redskyService;
     }
 
+    /**
+     * This method will call another service to get the product details from external source.
+     * If product found then it will fetch the product price from MongoDB and merge it with
+     * ProductDetails.
+     *
+     * @param productId product id
+     * @return product id, name, price, currency code
+     * @throws Exception
+     */
     public ProductDetails getProductDetails(long productId) throws Exception {
         // Fetch data from redsky service
         final ProductDetails productDetails = redskyService.getProductDetails(productId);
@@ -41,27 +53,40 @@ public class ProductService {
         // Fetch data from Mongo
         final Product product = self.fetchProduct(productId);
         productDetails.setCurrent_price(new ProductDetails.CurrentPrice(product.getValue(), product.getCurrencyCode()));
-
         return productDetails;
     }
 
+    /**
+     * This method fetch product data from MongoDB.
+     * It will also cache the data, so that new requests will serve from cache
+     * rather than going to DB.
+     *
+     * @param productId product id
+     * @return product details
+     */
     @Cacheable(value = "products")
     public Product fetchProduct(long productId) {
-        LOGGER.info("Retrieving data from MongoDB");
         final Optional<Product> productOptional = productRepository.findById(productId);
         if (!productOptional.isPresent()) {
             return null;
         }
-
+        LOGGER.info("Data found in MongoDB: product = {}", productId);
         return productOptional.get();
     }
 
+    /**
+     * This method will update the product details in MongoDB
+     * as well as in the cache.
+     *
+     * @param productDetails product details
+     * @return Updated produce details
+     */
     @CachePut(value = "products", key = "#productDetails.id")
     public Product updateProduct(ProductDetails productDetails) {
         final Product product = self.fetchProduct(productDetails.getId());
 
         if (product != null) {
-            LOGGER.info("Saving data to MongoDB");
+            LOGGER.info("Saving data to MongoDB: product = {}", productDetails.getId());
             product.setValue(productDetails.getCurrent_price().getValue());
             return productRepository.save(product);
         }

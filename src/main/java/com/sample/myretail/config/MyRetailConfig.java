@@ -3,9 +3,12 @@ package com.sample.myretail.config;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * This is the configuration class for MyRetail, which will load all the properties
+ */
 @Configuration
 @ConfigurationProperties("myretail.product")
-public class ProductConfig {
+public class MyRetailConfig {
     private String url;
     private int timeout;
 

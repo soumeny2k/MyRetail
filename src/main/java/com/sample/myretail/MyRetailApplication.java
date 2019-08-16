@@ -1,6 +1,6 @@
 package com.sample.myretail;
 
-import com.sample.myretail.config.ProductConfig;
+import com.sample.myretail.config.MyRetailConfig;
 import com.sample.myretail.repository.Product;
 import com.sample.myretail.repository.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -14,15 +14,29 @@ import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.builders.ResponseMessageBuilder;
+import springfox.documentation.schema.ModelRef;
+import springfox.documentation.service.ResponseMessage;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This is the starting point of MyRetail Spring boot application
+ */
 @SpringBootApplication
 @EnableCircuitBreaker
 @EnableCaching
+@EnableSwagger2
 public class MyRetailApplication {
 
     private static final String CURRENCY_CODE = "USD";
@@ -36,6 +50,10 @@ public class MyRetailApplication {
         return args -> populateData(productRepository);
     }
 
+    /**
+     * This method will insert all the data that needs to put in MongoDB
+     * @param productRepository bean reference
+     */
     private void populateData(ProductRepository productRepository) {
 
         Object[][] data = {
@@ -47,10 +65,12 @@ public class MyRetailApplication {
                 {15643793L, 86.345, CURRENCY_CODE}
         };
 
-        final List<Product> all = Arrays.stream(data).map(
-                array -> new Product((long) array[0],
+        final List<Product> all = Arrays.stream(data)
+                .map(array -> new Product(
+                        (long) array[0],
                         (double) array[1],
-                        (String) array[2]))
+                        (String) array[2]
+                        ))
                 .collect(Collectors.toList());
 
         productRepository.deleteAll();
@@ -58,10 +78,15 @@ public class MyRetailApplication {
     }
 
     @Bean
-    public RestTemplate restTemplate(ProductConfig productConfig) {
+    public RestTemplate restTemplate(MyRetailConfig productConfig) {
         return new RestTemplate(getClientHttpRequestFactory(productConfig.getTimeout()));
     }
 
+    /**
+     * This method will create HttpRequestFactory to attach with RestTemplate
+     * @param timeout timeout value for rest call
+     * @return
+     */
     private ClientHttpRequestFactory getClientHttpRequestFactory(int timeout) {
         final HttpComponentsClientHttpRequestFactory clientHttpRequestFactory
                 = new HttpComponentsClientHttpRequestFactory();
@@ -75,6 +100,33 @@ public class MyRetailApplication {
         cacheManager.setCaches(Arrays.asList(
                 new ConcurrentMapCache("products")));
         return cacheManager;
+    }
+
+    /**
+     * Enable Swagger UI
+     * @return
+     */
+    @Bean
+    public Docket api() {
+        final List<ResponseMessage> responseMessageBuilders = new ArrayList<>(2);
+        responseMessageBuilders.add(new ResponseMessageBuilder()
+                .code(500)
+                .message("500 message")
+                .responseModel(new ModelRef("string"))
+                .build());
+        responseMessageBuilders.add(new ResponseMessageBuilder()
+                .code(404)
+                .message("Not Found")
+                .build());
+
+        return new Docket(DocumentationType.SWAGGER_2)
+                    .select()
+                    .apis(RequestHandlerSelectors.any())
+                    .paths(PathSelectors.any())
+                    .build()
+                    .useDefaultResponseMessages(false)
+                    .globalResponseMessage(RequestMethod.GET, responseMessageBuilders)
+                    .globalResponseMessage(RequestMethod.PUT, responseMessageBuilders);
     }
 
 }
