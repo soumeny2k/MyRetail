@@ -1,5 +1,6 @@
 package com.sample.myretail;
 
+import com.google.common.base.Predicates;
 import com.sample.myretail.config.MyRetailConfig;
 import com.sample.myretail.repository.Product;
 import com.sample.myretail.repository.ProductRepository;
@@ -120,13 +121,14 @@ public class MyRetailApplication {
                 .build());
 
         return new Docket(DocumentationType.SWAGGER_2)
-                    .select()
-                    .apis(RequestHandlerSelectors.any())
-                    .paths(PathSelectors.any())
-                    .build()
-                    .useDefaultResponseMessages(false)
-                    .globalResponseMessage(RequestMethod.GET, responseMessageBuilders)
-                    .globalResponseMessage(RequestMethod.PUT, responseMessageBuilders);
+                .select()
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.any())
+                .paths(Predicates.not(PathSelectors.regex("/error.*")))
+                .build()
+                .useDefaultResponseMessages(false)
+                .globalResponseMessage(RequestMethod.GET, responseMessageBuilders)
+                .globalResponseMessage(RequestMethod.PUT, responseMessageBuilders);
     }
 
 }
