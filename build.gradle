@@ -71,7 +71,7 @@ pmdMain {
 }
 
 jar {
-    archivesBaseName = 'Myretail'
+    archivesBaseName = 'MyRetail'
 }
 
 test.finalizedBy jacocoTestCoverageVerification, jacocoTestReport
