@@ -21,6 +21,8 @@ Build an application that performs the following actions:
 •	BONUS: Accepts an HTTP PUT request at the same path (/products/{id}), containing a JSON request body similar to the GET response, and updates the product’s price in the data store.  
 
 # Build:
+Make sure JAVA_HOME points to JDK 8 before run gradle build.
+
 ## Linux or macOS:
 ```./gradlew clean build```
 ## Windows:
