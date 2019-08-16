@@ -56,7 +56,8 @@ public class RedskyService {
         return productDetails;
     }
 
-    private ProductDetails defaultProductDetails() {
+    public ProductDetails defaultProductDetails(long productId) {
+        logger.error("Fallback to hystrix default for product={}", productId);
         return null;
     }
 }
