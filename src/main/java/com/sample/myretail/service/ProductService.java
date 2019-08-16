@@ -40,7 +40,7 @@ public class ProductService {
 
         // Fetch data from Mongo
         final Product product = self.fetchProduct(productId);
-        productDetails.setCurrentPrice(new ProductDetails.CurrentPrice(product.getValue(), product.getCurrencyCode()));
+        productDetails.setCurrent_price(new ProductDetails.CurrentPrice(product.getValue(), product.getCurrencyCode()));
 
         return productDetails;
     }
@@ -62,7 +62,7 @@ public class ProductService {
 
         if (product != null) {
             LOGGER.info("Saving data to MongoDB");
-            product.setValue(productDetails.getCurrentPrice().getValue());
+            product.setValue(productDetails.getCurrent_price().getValue());
             return productRepository.save(product);
         }
         return null;

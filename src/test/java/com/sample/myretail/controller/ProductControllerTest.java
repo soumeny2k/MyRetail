@@ -66,8 +66,8 @@ public class ProductControllerTest {
                 .andReturn();
 
         final ProductDetails resultProduct = MAPPER.readValue(result.getResponse().getContentAsString(), ProductDetails.class);
-        assertEquals("Product value match", 18.98, resultProduct.getCurrentPrice().getValue(), 0.0);
-        assertEquals("Currency code match", "USD", resultProduct.getCurrentPrice().getCurrencyCode());
+        assertEquals("Product value match", 18.98, resultProduct.getCurrent_price().getValue(), 0.0);
+        assertEquals("Currency code match", "USD", resultProduct.getCurrent_price().getCurrencyCode());
     }
 
     @Test

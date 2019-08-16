@@ -47,7 +47,7 @@ public class ProductController {
                 return new ResponseEntity<>(NOT_FOUND);
             }
 
-            productDetails.setCurrentPrice(new ProductDetails.CurrentPrice(product.getValue(), product.getCurrencyCode()));
+            productDetails.setCurrent_price(new ProductDetails.CurrentPrice(product.getValue(), product.getCurrencyCode()));
             return ResponseEntity.ok(productDetails);
         } catch (Exception e) {
             LOGGER.error("Error updating product price:", e);

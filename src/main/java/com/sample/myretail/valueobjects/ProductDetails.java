@@ -1,6 +1,6 @@
 package com.sample.myretail.valueobjects;
 
-@SuppressWarnings("PMD.VariableNamingConventions")
+@SuppressWarnings({"PMD.VariableNamingConventions", "PMD.MethodNamingConventions"})
 public class ProductDetails {
     private long id;
     private String name;
@@ -22,11 +22,11 @@ public class ProductDetails {
         this.name = name;
     }
 
-    public CurrentPrice getCurrentPrice() {
+    public CurrentPrice getCurrent_price() {
         return current_price;
     }
 
-    public void setCurrentPrice(CurrentPrice current_price) {
+    public void setCurrent_price(CurrentPrice current_price) {
         this.current_price = current_price;
     }
 
