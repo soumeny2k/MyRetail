@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<ruleset name="Custom ruleset"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+    <description>
+        This list should be somewhat static. Most of the annoying checks have been disabled. That said if we need to
+        exclude rules we can over time.
+
+        If there are specific instances we can use suppressions like..
+        @SuppressWarnings("PMD.UseUtilityClass")  //Doesn't make sense as this is main...
+
+        ...or end the line with "// NOPMD" and an explanation comment. If we need to, but for the most part I would like
+        to avoid suppressing and ignoring. If you do suppress, provide a note why.
+    </description>
+
+    <rule ref="category/java/bestpractices.xml">
+        <exclude name="AccessorMethodGeneration"/>
+        <exclude name="GuardLogStatement"/>
+        <exclude name="JUnitTestsShouldIncludeAssert"/>
+        <exclude name="UnusedPrivateMethod"/>
+    </rule>
+
+    <rule ref="category/java/codestyle.xml">
+        <exclude name="AbstractNaming"/> <!-- Recommended; but not required -->
+        <exclude name="AtLeastOneConstructor"/> <!-- Review this one -->
+        <exclude name="AvoidFinalLocalVariable"/>
+        <exclude name="CallSuperInConstructor"/>
+        <exclude name="CommentDefaultAccessModifier"/>
+        <exclude name="DefaultPackage"/>
+        <exclude name="LocalVariableCouldBeFinal"/> <!-- Recommended; but not required -->
+        <exclude name="LongVariable"/>
+        <exclude name="MethodArgumentCouldBeFinal"/>
+        <exclude name="OnlyOneReturn"/>
+        <exclude name="ShortClassName"/>
+        <exclude name="ShortVariable"/>
+        <exclude name="TooManyStaticImports"/>
+        <exclude name="UnnecessaryConstructor"/>
+        <exclude name="UnnecessaryFullyQualifiedName"/>
+        <exclude name="AvoidUsingNativeCode"/>
+    </rule>
+
+    <rule ref="category/java/design.xml">
+        <exclude name="DataClass"/>
+        <exclude name="LawOfDemeter"/>
+        <exclude name="LoosePackageCoupling"/>
+        <exclude name="NcssCount"/> <!-- Review this one -->
+        <exclude name="UseObjectForClearerAPI"/> <!-- Review this one -->
+        <exclude name="SignatureDeclareThrowsException"/>
+        <exclude name="AvoidCatchingGenericException"/>
+    </rule>
+
+    <rule ref="category/java/documentation.xml">
+        <exclude name="CommentSize"/>
+        <exclude name="CommentRequired"/>
+    </rule>
+
+    <!--<rule ref="category/java/documentation.xml/CommentRequired">
+        <properties>
+            <property name="fieldCommentRequirement" value="Ignored"/>
+        </properties>
+    </rule>-->
+
+    <rule ref="category/java/errorprone.xml">
+        <exclude name="BeanMembersShouldSerialize"/>
+        <exclude name="NonStaticInitializer"/> <!-- Doesn't work with JMockit -->
+        <exclude name="DoNotCallSystemExit"/>
+        <exclude name="DataflowAnomalyAnalysis"/>
+    </rule>
+
+    <rule ref="category/java/multithreading.xml">
+        <exclude name="DoNotUseThreads"/>
+        <exclude name="AvoidSynchronizedAtMethodLevel"/>
+    </rule>
+
+    <rule ref="category/java/performance.xml">
+        <exclude name="AvoidInstantiatingObjectsInLoops"/>
+    </rule>
+
+</ruleset>

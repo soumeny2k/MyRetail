@@ -2,7 +2,7 @@ package com.sample.myretail.service;
 
 import com.sample.myretail.MyRetailSpringConfigTest;
 import com.sample.myretail.config.ProductConfig;
-import com.sample.myretail.valueObjects.ProductDetails;
+import com.sample.myretail.valueobjects.ProductDetails;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

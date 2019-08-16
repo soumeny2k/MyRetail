@@ -2,9 +2,11 @@ plugins {
     id "java"
     id "org.springframework.boot" version "2.1.7.RELEASE"
     id "idea"
+    id "pmd"
+    id "jacoco"
 }
 
-group 'sample.myRetail'
+group 'sample.myretail'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 
@@ -24,3 +26,56 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.1.7.RELEASE'
 }
+
+jacoco {
+    toolVersion = "0.8.0"
+    reportsDir = file("$buildDir/reports")
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        // See http://www.eclemma.org/jacoco/trunk/doc/counters.html for a description of the counters
+        rule {
+            limit {
+                counter = 'BRANCH'
+                minimum = 0.4
+            }
+        }
+        rule {
+            limit {
+                counter = 'LINE'
+                minimum = 0.8
+            }
+        }
+        rule {
+            limit {
+                counter = 'METHOD'
+                minimum = 0.8
+            }
+        }
+        rule {
+            limit {
+                counter = 'CLASS'
+                minimum = 0.8
+            }
+        }
+    }
+}
+
+pmd {
+    // Without specifying a version PMD was throwing parse errors on the lambda expressions.
+    toolVersion = "6.1.0"
+    sourceSets = [sourceSets.main]
+}
+
+pmdMain {
+    ruleSetFiles = files("pmd-ruleset.xml")
+    // Empty the ruleSets to execute the custom "pmd-ruleset.xml"
+    ruleSets = []
+}
+
+jar {
+    archivesBaseName = 'Myretail'
+}
+
+test.finalizedBy jacocoTestCoverageVerification, jacocoTestReport

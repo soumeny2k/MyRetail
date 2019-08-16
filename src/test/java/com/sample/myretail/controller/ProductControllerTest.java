@@ -6,7 +6,7 @@ import com.sample.myretail.MyRetailSpringConfigTest;
 import com.sample.myretail.repository.Product;
 import com.sample.myretail.repository.ProductRepository;
 import com.sample.myretail.service.RedskyService;
-import com.sample.myretail.valueObjects.ProductDetails;
+import com.sample.myretail.valueobjects.ProductDetails;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,8 +66,8 @@ public class ProductControllerTest {
                 .andReturn();
 
         final ProductDetails resultProduct = MAPPER.readValue(result.getResponse().getContentAsString(), ProductDetails.class);
-        assertEquals("Product value match", 18.98, resultProduct.getCurrent_price().getValue(), 0.0);
-        assertEquals("Currency code match", "USD", resultProduct.getCurrent_price().getCurrencyCode());
+        assertEquals("Product value match", 18.98, resultProduct.getCurrentPrice().getValue(), 0.0);
+        assertEquals("Currency code match", "USD", resultProduct.getCurrentPrice().getCurrencyCode());
     }
 
     @Test

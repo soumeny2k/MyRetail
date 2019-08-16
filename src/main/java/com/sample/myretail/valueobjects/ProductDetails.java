@@ -1,5 +1,6 @@
-package com.sample.myretail.valueObjects;
+package com.sample.myretail.valueobjects;
 
+@SuppressWarnings("PMD.VariableNamingConventions")
 public class ProductDetails {
     private long id;
     private String name;
@@ -21,11 +22,11 @@ public class ProductDetails {
         this.name = name;
     }
 
-    public CurrentPrice getCurrent_price() {
+    public CurrentPrice getCurrentPrice() {
         return current_price;
     }
 
-    public void setCurrent_price(CurrentPrice current_price) {
+    public void setCurrentPrice(CurrentPrice current_price) {
         this.current_price = current_price;
     }
 
@@ -33,7 +34,9 @@ public class ProductDetails {
         private double value;
         private String currencyCode;
 
-        public CurrentPrice() { }
+        public CurrentPrice() {
+            // This is needed for
+        }
 
         public CurrentPrice(double value, String currencyCode) {
             this.value = value;

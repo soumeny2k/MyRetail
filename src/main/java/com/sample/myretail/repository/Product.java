@@ -9,7 +9,9 @@ public class Product {
     private double value;
     private String currencyCode;
 
-    public Product() {}
+    public Product() {
+        // This is needed by jackson to create json
+    }
 
     public Product(long id, double value, String currencyCode) {
         this.id = id;

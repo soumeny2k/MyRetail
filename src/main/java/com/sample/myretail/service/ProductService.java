@@ -2,7 +2,7 @@ package com.sample.myretail.service;
 
 import com.sample.myretail.repository.Product;
 import com.sample.myretail.repository.ProductRepository;
-import com.sample.myretail.valueObjects.ProductDetails;
+import com.sample.myretail.valueobjects.ProductDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CachePut;
@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
-    private static final Logger logger = LoggerFactory.getLogger(ProductService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
 
     private final ProductRepository productRepository;
     private final RedskyService redskyService;
@@ -34,20 +34,24 @@ public class ProductService {
     public ProductDetails getProductDetails(long productId) throws Exception {
         // Fetch data from redsky service
         final ProductDetails productDetails = redskyService.getProductDetails(productId);
-        if (productDetails == null) return null;
+        if (productDetails == null) {
+            return null;
+        }
 
         // Fetch data from Mongo
         final Product product = self.fetchProduct(productId);
-        productDetails.setCurrent_price(new ProductDetails.CurrentPrice(product.getValue(), product.getCurrencyCode()));
+        productDetails.setCurrentPrice(new ProductDetails.CurrentPrice(product.getValue(), product.getCurrencyCode()));
 
         return productDetails;
     }
 
     @Cacheable(value = "products")
     public Product fetchProduct(long productId) {
-        logger.info("Retrieving data from MongoDB");
+        LOGGER.info("Retrieving data from MongoDB");
         final Optional<Product> productOptional = productRepository.findById(productId);
-        if (!productOptional.isPresent()) return null;
+        if (!productOptional.isPresent()) {
+            return null;
+        }
 
         return productOptional.get();
     }
@@ -57,8 +61,8 @@ public class ProductService {
         final Product product = self.fetchProduct(productDetails.getId());
 
         if (product != null) {
-            logger.info("Saving data to MongoDB");
-            product.setValue(productDetails.getCurrent_price().getValue());
+            LOGGER.info("Saving data to MongoDB");
+            product.setValue(productDetails.getCurrentPrice().getValue());
             return productRepository.save(product);
         }
         return null;

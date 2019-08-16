@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.sample.myretail.config.ProductConfig;
-import com.sample.myretail.valueObjects.ProductDetails;
+import com.sample.myretail.valueobjects.ProductDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import java.io.IOException;
 
 @Service
 public class RedskyService {
-    private static final Logger logger = LoggerFactory.getLogger(RedskyService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RedskyService.class);
 
     private final RestTemplate restTemplate;
     private final ProductConfig productConfig;
@@ -30,15 +30,21 @@ public class RedskyService {
     @HystrixCommand(fallbackMethod = "defaultProductDetails")
     public ProductDetails getProductDetails(long productId) throws IOException {
         final ResponseEntity<String> productData = restTemplate.getForEntity(productConfig.getUrl(productId), String.class);
-        if (productData.getBody() == null) return null;
+        if (productData.getBody() == null) {
+            return null;
+        }
 
-        final ProductDetails productDetails = new ProductDetails();
         final JsonNode node = MAPPER.readTree(productData.getBody());
         final JsonNode product = node.get("product");
-        if (!product.hasNonNull("item")) return null;
+        if (!product.hasNonNull("item")) {
+            return null;
+        }
 
         final JsonNode item = product.get("item");
-        if (!item.hasNonNull("tcin")) return null;
+        if (!item.hasNonNull("tcin")) {
+            return null;
+        }
+        final ProductDetails productDetails = new ProductDetails();
         productDetails.setId(item.get("tcin").asLong());
 
         final JsonNode productDescription = item.get("product_description");
@@ -48,7 +54,7 @@ public class RedskyService {
     }
 
     public ProductDetails defaultProductDetails(long productId) {
-        logger.error("Fallback to hystrix default for product={}", productId);
+        LOGGER.error("Fallback to hystrix default for product={}", productId);
         return null;
     }
 }

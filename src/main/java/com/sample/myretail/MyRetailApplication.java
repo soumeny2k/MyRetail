@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 @EnableCaching
 public class MyRetailApplication {
 
+    private static final String CURRENCY_CODE = "USD";
+
     public static void main(String args[]) {
         SpringApplication.run(MyRetailApplication.class, args);
     }
@@ -37,12 +39,12 @@ public class MyRetailApplication {
     private void populateData(ProductRepository productRepository) {
 
         Object[][] data = {
-                {13860428L, 18.87, "USD"},
-                {15117729L, 16.87, "USD"},
-                {16483589L, 33.87, "USD"},
-                {16696652L, 50.87, "USD"},
-                {16752456L, 100.345, "USD"},
-                {15643793L, 86.345, "USD"}
+                {13860428L, 18.87, CURRENCY_CODE},
+                {15117729L, 16.87, CURRENCY_CODE},
+                {16483589L, 33.87, CURRENCY_CODE},
+                {16696652L, 50.87, CURRENCY_CODE},
+                {16752456L, 100.345, CURRENCY_CODE},
+                {15643793L, 86.345, CURRENCY_CODE}
         };
 
         final List<Product> all = Arrays.stream(data).map(
