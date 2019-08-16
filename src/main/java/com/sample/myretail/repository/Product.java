@@ -6,12 +6,12 @@ public class Product {
     @Id
     private long id;
 
-    private Double value;
+    private double value;
     private String currencyCode;
 
     public Product() {}
 
-    public Product(long id, Double value, String currencyCode) {
+    public Product(long id, double value, String currencyCode) {
         this.id = id;
         this.value = value;
         this.currencyCode = currencyCode;
@@ -25,11 +25,11 @@ public class Product {
         this.id = id;
     }
 
-    public Double getValue() {
+    public double getValue() {
         return value;
     }
 
-    public void setValue(Double value) {
+    public void setValue(double value) {
         this.value = value;
     }
 

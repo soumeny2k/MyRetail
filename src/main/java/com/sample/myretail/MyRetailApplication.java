@@ -5,10 +5,16 @@ import com.sample.myretail.repository.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @SpringBootApplication
+@EnableCircuitBreaker
 public class MyRetailApplication {
 
     public static void main(String args[]) {
@@ -26,45 +32,24 @@ public class MyRetailApplication {
     }
 
     private void populateData(ProductRepository productRepository) {
-        Product product = new Product();
-        product.setId(13860428);
-        product.setValue(18.87);
-        product.setCurrencyCode("USD");
 
-        productRepository.save(product);
+        Object[][] data = {
+                {13860428, 18.87, "USD"},
+                {15117729, 16.87, "USD"},
+                {16483589, 33.87, "USD"},
+                {16696652, 50.87, "USD"},
+                {16752456, 100.345, "USD"},
+                {15643793, 86.345, "USD"}
+        };
 
-        product = new Product();
-        product.setId(15117729);
-        product.setValue(16.87);
-        product.setCurrencyCode("USD");
+        final List<Product> all = Arrays.stream(data).map(
+                array -> new Product((long) array[0],
+                        (double) array[1],
+                        (String) array[2]))
+                .collect(Collectors.toList());
 
-        productRepository.save(product);
-
-        product = new Product();
-        product.setId(16483589);
-        product.setValue(33.87);
-        product.setCurrencyCode("USD");
-
-        productRepository.save(product);
-
-        product = new Product();
-        product.setId(16696652);
-        product.setValue(50.87);
-        product.setCurrencyCode("USD");
-
-        productRepository.save(product);
-
-        product = new Product();
-        product.setId(16752456);
-        product.setValue(100.345);
-        product.setCurrencyCode("USD");
-
-        product = new Product();
-        product.setId(15643793);
-        product.setValue(86.345);
-        product.setCurrencyCode("USD");
-
-        productRepository.save(product);
+        productRepository.deleteAll();
+        productRepository.saveAll(all);
     }
 
 }

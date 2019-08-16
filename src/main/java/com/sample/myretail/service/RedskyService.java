@@ -2,6 +2,7 @@ package com.sample.myretail.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.sample.myretail.config.ProductConfig;
 import com.sample.myretail.exception.ProductException;
 import com.sample.myretail.valueObjects.ProductDetails;
@@ -29,6 +30,7 @@ public class RedskyService {
         this.productConfig = productConfig;
     }
 
+    @HystrixCommand(fallbackMethod = "defaultProductDetails")
     public ProductDetails getProductDetails(long productId) throws IOException {
 
         ProductDetails productDetails;
@@ -51,7 +53,10 @@ public class RedskyService {
             logger.error("Error while looking for product", re);
             throw new ProductException(re.getRawStatusCode(), "Product not found");
         }
-
         return productDetails;
+    }
+
+    private ProductDetails defaultProductDetails() {
+        return null;
     }
 }

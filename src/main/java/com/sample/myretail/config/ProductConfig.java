@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties("casestudy.product")
+@ConfigurationProperties("myRetail.product")
 public class ProductConfig {
     private String url;
 

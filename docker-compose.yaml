@@ -1,13 +1,13 @@
 version: '2'
 services:
-  casestudy:
+  myRetail:
     build: .
     environment:
-      - server_contextPath=/casestudy
+      - server_contextPath=/myRetail
       - spring_data_mongodb_host=mongodb
       - spring_data_mongodb_port=27017
-      - spring_data_mongodb_database=casestudy
-      - casestudy_product_url=https://redsky.target.com/v2/pdp/tcin/%d?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics,deep_red_labels,available_to_promise_network
+      - spring_data_mongodb_database=myRetail
+      - myRetail_product_url=https://redsky.target.com/v2/pdp/tcin/%d?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics,deep_red_labels,available_to_promise_network
     depends_on:
       - mongodb
     ports:
