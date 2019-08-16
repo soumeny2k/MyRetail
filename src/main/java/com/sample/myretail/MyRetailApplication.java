@@ -6,6 +6,10 @@ import com.sample.myretail.repository.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
+import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -18,6 +22,7 @@ import java.util.stream.Collectors;
 
 @SpringBootApplication
 @EnableCircuitBreaker
+@EnableCaching
 public class MyRetailApplication {
 
     public static void main(String args[]) {
@@ -27,11 +32,6 @@ public class MyRetailApplication {
     @Bean
     CommandLineRunner init(ProductRepository productRepository) {
         return args -> populateData(productRepository);
-    }
-
-    @Bean
-    public RestTemplate restTemplate(ProductConfig productConfig) {
-        return new RestTemplate(getClientHttpRequestFactory(productConfig.getTimeout()));
     }
 
     private void populateData(ProductRepository productRepository) {
@@ -55,11 +55,24 @@ public class MyRetailApplication {
         productRepository.saveAll(all);
     }
 
+    @Bean
+    public RestTemplate restTemplate(ProductConfig productConfig) {
+        return new RestTemplate(getClientHttpRequestFactory(productConfig.getTimeout()));
+    }
+
     private ClientHttpRequestFactory getClientHttpRequestFactory(int timeout) {
-        HttpComponentsClientHttpRequestFactory clientHttpRequestFactory
+        final HttpComponentsClientHttpRequestFactory clientHttpRequestFactory
                 = new HttpComponentsClientHttpRequestFactory();
         clientHttpRequestFactory.setConnectTimeout(timeout);
         return clientHttpRequestFactory;
+    }
+
+    @Bean
+    public CacheManager cacheManager() {
+        final SimpleCacheManager cacheManager = new SimpleCacheManager();
+        cacheManager.setCaches(Arrays.asList(
+                new ConcurrentMapCache("products")));
+        return cacheManager;
     }
 
 }

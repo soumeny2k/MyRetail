@@ -1,6 +1,6 @@
 package com.sample.myretail.controller;
 
-import com.sample.myretail.exception.ProductException;
+import com.sample.myretail.repository.Product;
 import com.sample.myretail.service.ProductService;
 import com.sample.myretail.valueObjects.ProductDetails;
 import org.slf4j.Logger;
@@ -23,31 +23,28 @@ public class ProductController {
 
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductDetails> get(@PathVariable Long id) {
-        if (id == null) return new ResponseEntity<>(BAD_REQUEST);
         try {
             final ProductDetails productDetails = productService.getProductDetails(id);
             if (productDetails == null) return new ResponseEntity<>(NOT_FOUND);
+
             return ResponseEntity.ok(productDetails);
-        } catch (ProductException pe) {
-            logger.error("Fetching product details from Redsky failed:", pe);
-            if (pe.getStatus() == NOT_FOUND.value()) {
-                return new ResponseEntity<>(NOT_FOUND);
-            } else {
-                return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
-            }
-        } catch (Exception e) {
-            logger.error("Error fetching product data:", e);
+        } catch (Exception ex) {
+            logger.error("Error fetching product details:", ex);
             return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
         }
     }
 
     @PutMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> update(@RequestBody ProductDetails productDetails) {
+    public ResponseEntity<ProductDetails> update(@PathVariable Long id, @RequestBody ProductDetails productDetails) {
         try {
-            final boolean isUpdated = productService.updateProduct(productDetails);
-            if (!isUpdated) return new ResponseEntity<>(NOT_FOUND);
+            if (id != productDetails.getId()) {
+                return new ResponseEntity<>(BAD_REQUEST);
+            }
+            final Product product = productService.updateProduct(productDetails);
+            if (product == null) return new ResponseEntity<>(NOT_FOUND);
 
-            return ResponseEntity.ok("success");
+            productDetails.setCurrent_price(new ProductDetails.CurrentPrice(product.getValue(), product.getCurrencyCode()));
+            return ResponseEntity.ok(productDetails);
         } catch (Exception e) {
             logger.error("Error updating product price:", e);
             return new ResponseEntity<>(INTERNAL_SERVER_ERROR);

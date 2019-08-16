@@ -3,7 +3,6 @@ package com.sample.myretail.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoClientException;
 import com.sample.myretail.MyRetailSpringConfigTest;
-import com.sample.myretail.exception.ProductException;
 import com.sample.myretail.repository.Product;
 import com.sample.myretail.repository.ProductRepository;
 import com.sample.myretail.service.RedskyService;
@@ -14,10 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.client.RestClientException;
 
 import java.util.Optional;
 
@@ -74,7 +73,7 @@ public class ProductControllerTest {
     @Test
     public void testRedskyServiceFailure() throws Exception {
         when(redskyService.getProductDetails(anyLong()))
-                .thenThrow(new ProductException(HttpStatus.INTERNAL_SERVER_ERROR.value() ,"service is down"));
+                .thenThrow(new RestClientException("Service not available"));
 
         final Product product = new Product();
         product.setId(productId);
@@ -93,10 +92,10 @@ public class ProductControllerTest {
     @Test
     public void testRedskyServiceProductNotFound() throws Exception {
         when(redskyService.getProductDetails(anyLong()))
-                .thenThrow(new ProductException(HttpStatus.NOT_FOUND.value() ,"not found"));
+                .thenThrow(new RestClientException("Service not available"));
 
         mockMvc.perform(get("/products/" + productId))
-                .andExpect(status().isNotFound())
+                .andExpect(status().isInternalServerError())
                 .andReturn();
     }
 
