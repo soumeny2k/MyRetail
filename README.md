@@ -49,7 +49,7 @@ Use below command to run MongoDB Docker container at port 27017.
 
 Use below command to run myRetail application as standalone using above mongo container.
 
-```java -jar build/libs/MyRetail.jar```
+```java -jar build/libs/myRetail.jar```
 
 ## Docker Compose:
 Below command will run application using docker compose. This will run both MongoDB image and the MyRetail application image together.
