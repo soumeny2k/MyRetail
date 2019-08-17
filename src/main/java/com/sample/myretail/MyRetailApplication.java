@@ -66,7 +66,7 @@ public class MyRetailApplication {
                 {15643793L, 86.345, CURRENCY_CODE}
         };
 
-        final List<Product> all = Arrays.stream(data)
+        final List<Product> products = Arrays.stream(data)
                 .map(array -> new Product(
                         (long) array[0],
                         (double) array[1],
@@ -75,7 +75,7 @@ public class MyRetailApplication {
                 .collect(Collectors.toList());
 
         productRepository.deleteAll();
-        productRepository.saveAll(all);
+        productRepository.saveAll(products);
     }
 
     @Bean

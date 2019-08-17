@@ -1,5 +1,6 @@
 package com.sample.myretail.controller;
 
+import com.sample.myretail.exception.ProductNotFoundException;
 import com.sample.myretail.repository.Product;
 import com.sample.myretail.service.ProductService;
 import com.sample.myretail.valueobject.ProductDetails;
@@ -7,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -16,6 +18,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  */
 @RestController
 @RequestMapping(value = "/products")
+@SuppressWarnings("PMD.PreserveStackTrace")
 public class ProductController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
@@ -36,15 +39,14 @@ public class ProductController {
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductDetails> get(@PathVariable Long id) {
         try {
-            final ProductDetails productDetails = productService.getProductDetails(id);
-            if (productDetails == null) {
-                return new ResponseEntity<>(NOT_FOUND);
-            }
-
-            return ResponseEntity.ok(productDetails);
+            return ResponseEntity.ok(productService.getProduct(id));
+        } catch (ProductNotFoundException pnfe) {
+            LOGGER.error(pnfe.getMessage(), pnfe);
+            throw new ResponseStatusException(NOT_FOUND, pnfe.getMessage());
         } catch (Exception ex) {
-            LOGGER.error("Error fetching product details:", ex);
-            return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
+            final String msg = "Error fetching product details: product = " + id;
+            LOGGER.error(msg, ex);
+            throw new ResponseStatusException(INTERNAL_SERVER_ERROR, msg);
         }
     }
 
@@ -59,20 +61,21 @@ public class ProductController {
      */
     @PutMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<ProductDetails> update(@PathVariable Long id, @RequestBody ProductDetails productDetails) {
+        if (id != productDetails.getId()) {
+            throw new ResponseStatusException(BAD_REQUEST, "Product id does not match");
+        }
         try {
-            if (id != productDetails.getId()) {
-                return new ResponseEntity<>(BAD_REQUEST);
-            }
             final Product product = productService.updateProduct(productDetails);
-            if (product == null) {
-                return new ResponseEntity<>(NOT_FOUND);
-            }
-
+            // update product price with latest value
             productDetails.setCurrent_price(new ProductDetails.CurrentPrice(product.getValue(), product.getCurrencyCode()));
             return ResponseEntity.ok(productDetails);
+        } catch (ProductNotFoundException pnfe) {
+            LOGGER.error(pnfe.getMessage(), pnfe);
+            throw new ResponseStatusException(NOT_FOUND, pnfe.getMessage());
         } catch (Exception ex) {
-            LOGGER.error("Error updating product price:", ex);
-            return new ResponseEntity<>(INTERNAL_SERVER_ERROR);
+            final String msg = "Error updating product price: product = " + id;
+            LOGGER.error(msg, ex);
+            throw new ResponseStatusException(INTERNAL_SERVER_ERROR, msg);
         }
     }
 }

@@ -43,7 +43,11 @@ After gradle build completed run below Docker command to make image of the artif
 
 # Run:
 ## Standalone:
-Use below command to run it as standalone application. This will require MongoDB to be running in your system at port 27017.
+Use below command to run MongoDB Docker container at port 27017.
+
+```docker run -d -p 27017:27017 --name mongodb mongo:latest```
+
+Use below command to run myRetail application as standalone using above mongo container.
 
 ```java -jar build/libs/MyRetail.jar```
 

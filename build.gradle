@@ -70,8 +70,4 @@ pmdMain {
     ruleSets = []
 }
 
-jar {
-    archivesBaseName = 'MyRetail'
-}
-
 test.finalizedBy jacocoTestCoverageVerification, jacocoTestReport

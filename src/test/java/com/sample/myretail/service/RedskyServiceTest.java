@@ -60,7 +60,7 @@ public class RedskyServiceTest {
                 .thenReturn(new ResponseEntity<>(json, HttpStatus.OK));
         when(productConfig.getUrl(anyLong())).thenReturn("http://redsky.com");
 
-        final ProductDetails productDetails = redskyService.getProductDetails(productId);
+        final ProductDetails productDetails = redskyService.getProduct(productId);
         assertEquals("Product id match", productId, productDetails.getId());
         assertEquals("Product name match", "The Big Lebowski (Blu-ray)", productDetails.getName());
     }
@@ -77,7 +77,7 @@ public class RedskyServiceTest {
                 .thenReturn(new ResponseEntity<>(json, HttpStatus.OK));
         when(productConfig.getUrl(anyLong())).thenReturn("http://redsky.com");
 
-        final ProductDetails productDetails = redskyService.getProductDetails(productId);
+        final ProductDetails productDetails = redskyService.getProduct(productId);
         assertEquals("Null product details", null, productDetails);
     }
 
@@ -91,7 +91,7 @@ public class RedskyServiceTest {
                 .thenReturn(new ResponseEntity<>(json, HttpStatus.OK));
         when(productConfig.getUrl(anyLong())).thenReturn("http://redsky.com");
 
-        final ProductDetails productDetails = redskyService.getProductDetails(productId);
+        final ProductDetails productDetails = redskyService.getProduct(productId);
         assertEquals("Null product details", null, productDetails);
     }
 
@@ -102,6 +102,6 @@ public class RedskyServiceTest {
         when(productConfig.getUrl(anyLong())).thenReturn("http://redsky.com");
 
         //exceptionRule.expect(ProductException.class);
-        redskyService.getProductDetails(productId);
+        redskyService.getProduct(productId);
     }
 }

@@ -40,7 +40,7 @@ public class RedskyService {
      * @throws IOException
      */
     @HystrixCommand(fallbackMethod = "defaultProductDetails")
-    public ProductDetails getProductDetails(long productId) throws IOException {
+    public ProductDetails getProduct(long productId) throws IOException {
         final String redSkyServiceUrl = productConfig.getUrl(productId);
         LOGGER.info("Redsky Service url = {}", redSkyServiceUrl);
         final ResponseEntity<String> productData = restTemplate.getForEntity(redSkyServiceUrl, String.class);

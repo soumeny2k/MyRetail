@@ -21,15 +21,18 @@ import org.springframework.web.client.RestClientException;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(ProductController.class)
 @Import(MyRetailSpringConfigTest.class)
-public class ProductControllerTest {
+public class ProductControllerGetTest {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private long productId = 16696652L;
@@ -49,7 +52,7 @@ public class ProductControllerTest {
         productDetails.setId(productId);
         productDetails.setName("Test product");
 
-        when(redskyService.getProductDetails(anyLong()))
+        when(redskyService.getProduct(anyLong()))
                 .thenReturn(productDetails);
 
         final Product product = new Product();
@@ -72,7 +75,7 @@ public class ProductControllerTest {
 
     @Test
     public void testRedskyServiceFailure() throws Exception {
-        when(redskyService.getProductDetails(anyLong()))
+        when(redskyService.getProduct(anyLong()))
                 .thenThrow(new RestClientException("Service not available"));
 
         final Product product = new Product();
@@ -91,7 +94,7 @@ public class ProductControllerTest {
 
     @Test
     public void testRedskyServiceProductNotFound() throws Exception {
-        when(redskyService.getProductDetails(anyLong()))
+        when(redskyService.getProduct(anyLong()))
                 .thenThrow(new RestClientException("Service not available"));
 
         mockMvc.perform(get("/products/" + productId))
@@ -105,7 +108,7 @@ public class ProductControllerTest {
         productDetails.setId(productId);
         productDetails.setName("Test product");
 
-        when(redskyService.getProductDetails(anyLong()))
+        when(redskyService.getProduct(anyLong()))
                 .thenReturn(productDetails);
 
         when(productRepository.findById(anyLong()))
