@@ -6,7 +6,7 @@
     <!-- REPLACE-TEMPLATE - FILE_LOG_PATTERN -->
     <property name="FILE_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss.SSSZ}] [MY_RETAIL] ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
     <!-- REPLACE-TEMPLATE - LOG PATH -->
-    <property name="LOG_PATH" value="log/MyRetail"/>
+    <property name="LOG_PATH" value="log/myRetail"/>
 
     <appender name="FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
