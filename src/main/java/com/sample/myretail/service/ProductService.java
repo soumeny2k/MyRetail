@@ -52,6 +52,9 @@ public class ProductService {
 
         // Fetch data from Mongo
         final Product product = self.fetchProduct(productId);
+        if (product == null) {
+            return null;
+        }
         productDetails.setCurrent_price(new ProductDetails.CurrentPrice(product.getValue(), product.getCurrencyCode()));
         return productDetails;
     }
