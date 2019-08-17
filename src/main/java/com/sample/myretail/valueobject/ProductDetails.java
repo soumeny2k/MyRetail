@@ -35,24 +35,27 @@ public class ProductDetails {
 
     public static class CurrentPrice {
         private double value;
-        private String currencyCode;
+        private String currency_code;
 
         public CurrentPrice() {
             // This is needed for
         }
 
-        public CurrentPrice(double value, String currencyCode) {
+        public CurrentPrice(double value, String currency_code) {
             this.value = value;
-            this.currencyCode = currencyCode;
+            this.currency_code = currency_code;
         }
 
         public double getValue() {
             return value;
         }
 
-        public String getCurrencyCode() {
-            return currencyCode;
+        public String getCurrency_code() {
+            return currency_code;
         }
 
+        public void setCurrency_code(String currency_code) {
+            this.currency_code = currency_code;
+        }
     }
 }
