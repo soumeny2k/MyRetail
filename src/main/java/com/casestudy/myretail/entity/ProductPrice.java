@@ -1,4 +1,4 @@
-package com.sample.myretail.domain;
+package com.casestudy.myretail.entity;
 
 import org.springframework.data.annotation.Id;
 

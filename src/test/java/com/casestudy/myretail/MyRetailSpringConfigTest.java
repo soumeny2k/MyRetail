@@ -1,7 +1,7 @@
-package com.sample.myretail;
+package com.casestudy.myretail;
 
 import org.springframework.context.annotation.ComponentScan;
 
-@ComponentScan(value = "com.sample.myretail")
+@ComponentScan(value = "com.casestudy.myretail")
 public class MyRetailSpringConfigTest {
 }

@@ -1,12 +1,12 @@
-package com.sample.myretail.controller;
+package com.casestudy.myretail.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sample.myretail.MyRetailSpringConfigTest;
-import com.sample.myretail.domain.Currency;
-import com.sample.myretail.domain.ProductPrice;
-import com.sample.myretail.repository.ProductPriceRepository;
-import com.sample.myretail.valueobject.Money;
-import com.sample.myretail.valueobject.Product;
+import com.casestudy.myretail.MyRetailSpringConfigTest;
+import com.casestudy.myretail.entity.Currency;
+import com.casestudy.myretail.entity.ProductPrice;
+import com.casestudy.myretail.repository.ProductPriceRepository;
+import com.casestudy.myretail.valueobject.Money;
+import com.casestudy.myretail.valueobject.Product;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

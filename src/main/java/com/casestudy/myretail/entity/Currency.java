@@ -1,4 +1,4 @@
-package com.sample.myretail.domain;
+package com.casestudy.myretail.entity;
 
 import java.math.BigDecimal;
 import java.util.Objects;

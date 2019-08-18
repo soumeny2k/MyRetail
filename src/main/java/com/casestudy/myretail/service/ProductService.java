@@ -1,10 +1,10 @@
-package com.sample.myretail.service;
+package com.casestudy.myretail.service;
 
-import com.sample.myretail.domain.ProductPrice;
-import com.sample.myretail.exception.ProductNotFoundException;
-import com.sample.myretail.repository.ProductPriceRepository;
-import com.sample.myretail.valueobject.Money;
-import com.sample.myretail.valueobject.Product;
+import com.casestudy.myretail.exception.ProductNotFoundException;
+import com.casestudy.myretail.repository.ProductPriceRepository;
+import com.casestudy.myretail.valueobject.Product;
+import com.casestudy.myretail.entity.ProductPrice;
+import com.casestudy.myretail.valueobject.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.CachePut;

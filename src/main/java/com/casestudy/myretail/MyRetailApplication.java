@@ -1,10 +1,10 @@
-package com.sample.myretail;
+package com.casestudy.myretail;
 
 import com.google.common.base.Predicates;
-import com.sample.myretail.config.MyRetailConfig;
-import com.sample.myretail.domain.Currency;
-import com.sample.myretail.domain.ProductPrice;
-import com.sample.myretail.repository.ProductPriceRepository;
+import com.casestudy.myretail.config.MyRetailConfig;
+import com.casestudy.myretail.entity.Currency;
+import com.casestudy.myretail.entity.ProductPrice;
+import com.casestudy.myretail.repository.ProductPriceRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -61,12 +61,13 @@ public class MyRetailApplication {
     private void populateData(ProductPriceRepository productPriceRepository) {
 
         Object[][] data = {
-                {13860428L, 18.87, CURRENCY_CODE},
-                {15117729L, 16.87, CURRENCY_CODE},
-                {16483589L, 33.87, CURRENCY_CODE},
-                {16696652L, 50.87, CURRENCY_CODE},
-                {16752456L, 100.345, CURRENCY_CODE},
-                {15643793L, 86.345, CURRENCY_CODE}
+                { 13860428L, 18.87, CURRENCY_CODE },
+                { 15117729L, 16.87, CURRENCY_CODE },
+                { 16483589L, 33.87, CURRENCY_CODE },
+                { 16696652L, 50.87, CURRENCY_CODE },
+                { 16752456L, 100.34, CURRENCY_CODE },
+                { 15643793L, 86.35, CURRENCY_CODE },
+                { 13860423L, 200.50, CURRENCY_CODE }
         };
 
         final List<ProductPrice> productPrices = Arrays.stream(data)
@@ -97,6 +98,7 @@ public class MyRetailApplication {
         final HttpComponentsClientHttpRequestFactory clientHttpRequestFactory
                 = new HttpComponentsClientHttpRequestFactory();
         clientHttpRequestFactory.setConnectTimeout(timeout);
+        clientHttpRequestFactory.setReadTimeout(timeout);
         return clientHttpRequestFactory;
     }
 

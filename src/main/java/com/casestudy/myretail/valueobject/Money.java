@@ -1,4 +1,4 @@
-package com.sample.myretail.valueobject;
+package com.casestudy.myretail.valueobject;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

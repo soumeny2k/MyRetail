@@ -1,8 +1,8 @@
-package com.sample.myretail.service;
+package com.casestudy.myretail.service;
 
-import com.sample.myretail.MyRetailSpringConfigTest;
-import com.sample.myretail.config.MyRetailConfig;
-import com.sample.myretail.valueobject.Product;
+import com.casestudy.myretail.MyRetailSpringConfigTest;
+import com.casestudy.myretail.config.MyRetailConfig;
+import com.casestudy.myretail.valueobject.Product;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

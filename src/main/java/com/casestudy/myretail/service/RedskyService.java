@@ -1,10 +1,10 @@
-package com.sample.myretail.service;
+package com.casestudy.myretail.service;
 
+import com.casestudy.myretail.config.MyRetailConfig;
+import com.casestudy.myretail.valueobject.Product;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.sample.myretail.config.MyRetailConfig;
-import com.sample.myretail.valueobject.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +39,7 @@ public class RedskyService {
      * @return product details
      * @throws IOException
      */
-    @HystrixCommand(fallbackMethod = "defaultProductDetails")
+    @HystrixCommand(fallbackMethod = "defaultProduct")
     public Product getProduct(long productId) throws IOException {
         final String redSkyServiceUrl = productConfig.getUrl(productId);
         LOGGER.info("Redsky Service url = {}", redSkyServiceUrl);
@@ -74,8 +74,8 @@ public class RedskyService {
      * @param productId product id
      * @return
      */
-    public Product defaultProductDetails(long productId) {
-        LOGGER.error("Fetching product details from Redsky service failed, falling back to hystrix default: product={}", productId);
+    public Product defaultProduct(long productId, Throwable e) {
+        LOGGER.error("Fetching product details from Redsky service failed, falling back to hystrix default: product=" + productId, e);
         return null;
     }
 }

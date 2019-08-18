@@ -1,6 +1,6 @@
-package com.sample.myretail.repository;
+package com.casestudy.myretail.repository;
 
-import com.sample.myretail.domain.ProductPrice;
+import com.casestudy.myretail.entity.ProductPrice;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**

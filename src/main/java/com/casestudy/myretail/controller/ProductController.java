@@ -1,15 +1,17 @@
-package com.sample.myretail.controller;
+package com.casestudy.myretail.controller;
 
-import com.sample.myretail.domain.ProductPrice;
-import com.sample.myretail.exception.ProductNotFoundException;
-import com.sample.myretail.service.ProductService;
-import com.sample.myretail.valueobject.Money;
-import com.sample.myretail.valueobject.Product;
+import com.casestudy.myretail.valueobject.Product;
+import com.casestudy.myretail.entity.ProductPrice;
+import com.casestudy.myretail.exception.ProductNotFoundException;
+import com.casestudy.myretail.service.ProductService;
+import com.casestudy.myretail.valueobject.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.math.BigDecimal;
 
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -19,7 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  */
 @RestController
 @RequestMapping(value = "/products")
-@SuppressWarnings("PMD.PreserveStackTrace")
+@SuppressWarnings({ "PMD.PreserveStackTrace", "PMD.ConfusingTernary"})
 public class ProductController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
@@ -62,9 +64,7 @@ public class ProductController {
      */
     @PutMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product) {
-        if (id != product.getProductId()) {
-            throw new ResponseStatusException(BAD_REQUEST, "Product id does not match");
-        }
+        validate(id, product);
         try {
             final ProductPrice productPrice = productService.updateProduct(product);
             // update product price with latest value
@@ -77,6 +77,26 @@ public class ProductController {
             final String msg = "Error updating product price: product = " + id;
             LOGGER.error(msg, ex);
             throw new ResponseStatusException(INTERNAL_SERVER_ERROR, msg);
+        }
+    }
+
+    /**
+     * This method will validate the input request
+     * @param id product id
+     * @param product product details
+     */
+    private void validate(Long id, Product product) {
+        boolean isValid = true;
+        String msg = null;
+        if (id != product.getProductId()) {
+            msg = "Product id does not match";
+            isValid = false;
+        } else if (product.getMoney().getValue().compareTo(BigDecimal.ZERO) < 0) {
+            msg = "Product price should be greater than 0";
+            isValid = false;
+        }
+        if (!isValid) {
+            throw new ResponseStatusException(BAD_REQUEST, msg);
         }
     }
 }
