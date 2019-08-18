@@ -43,12 +43,11 @@ public class Currency {
             return false;
         }
         Currency currency = (Currency) o;
-        return Objects.equals(value, currency.value) &&
-                Objects.equals(code, currency.code);
+        return Objects.equals(code, currency.code);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value, code);
+        return Objects.hash(code);
     }
 }
