@@ -5,6 +5,7 @@ import com.sample.myretail.MyRetailSpringConfigTest;
 import com.sample.myretail.domain.Currency;
 import com.sample.myretail.domain.ProductPrice;
 import com.sample.myretail.repository.ProductPriceRepository;
+import com.sample.myretail.valueobject.Money;
 import com.sample.myretail.valueobject.Product;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -57,11 +58,11 @@ public class ProductControllerUpdateTest {
         final Product product = new Product();
         product.setProductId(productId);
         product.setName("Test product");
-        product.setCurrency(new com.sample.myretail.valueobject.Currency(BigDecimal.valueOf(100.98), "USD"));
+        product.setMoney(new Money(BigDecimal.valueOf(100.98), "USD"));
 
         final ProductPrice updatedProductPrice = new ProductPrice();
         updatedProductPrice.setProductId(productId);
-        updatedProductPrice.setCurrency(new Currency(product.getCurrency().getValue(), product.getCurrency().getCode()));
+        updatedProductPrice.setCurrency(new Currency(product.getMoney().getValue(), product.getMoney().getCode()));
 
         when(productPriceRepository.save(any(ProductPrice.class)))
                 .thenReturn(updatedProductPrice);
@@ -74,8 +75,8 @@ public class ProductControllerUpdateTest {
                 .andReturn();
 
         final Product resultProduct = MAPPER.readValue(result.getResponse().getContentAsString(), Product.class);
-        assertEquals("Product value match", product.getCurrency().getValue().doubleValue(), resultProduct.getCurrency().getValue().doubleValue(), 0.0);
-        assertEquals("Currency code match", "USD", resultProduct.getCurrency().getCode());
+        assertEquals("Product value match", product.getMoney().getValue().doubleValue(), resultProduct.getMoney().getValue().doubleValue(), 0.0);
+        assertEquals("Currency code match", "USD", resultProduct.getMoney().getCode());
     }
 
     @Test
@@ -83,7 +84,7 @@ public class ProductControllerUpdateTest {
         final Product product = new Product();
         product.setProductId(123456L);
         product.setName("Test product");
-        product.setCurrency(new com.sample.myretail.valueobject.Currency(BigDecimal.valueOf(100.98), "USD"));
+        product.setMoney(new Money(BigDecimal.valueOf(100.98), "USD"));
 
         mockMvc.perform(put("/products/" + productId)
                 .contentType(APPLICATION_JSON)
@@ -101,7 +102,7 @@ public class ProductControllerUpdateTest {
         final Product product = new Product();
         product.setProductId(productId);
         product.setName("Test product");
-        product.setCurrency(new com.sample.myretail.valueobject.Currency(BigDecimal.valueOf(100.98), "USD"));
+        product.setMoney(new Money(BigDecimal.valueOf(100.98), "USD"));
 
         mockMvc.perform(put("/products/" + productId)
                 .contentType(APPLICATION_JSON)

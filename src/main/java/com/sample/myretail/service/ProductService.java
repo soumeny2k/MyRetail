@@ -3,7 +3,7 @@ package com.sample.myretail.service;
 import com.sample.myretail.domain.ProductPrice;
 import com.sample.myretail.exception.ProductNotFoundException;
 import com.sample.myretail.repository.ProductPriceRepository;
-import com.sample.myretail.valueobject.Currency;
+import com.sample.myretail.valueobject.Money;
 import com.sample.myretail.valueobject.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +55,7 @@ public class ProductService {
 
         // Fetch data from Mongo
         final ProductPrice productPrice = self.fetchProduct(productId);
-        product.setCurrency(new Currency(productPrice.getCurrency().getValue(), productPrice.getCurrency().getCode()));
+        product.setMoney(new Money(productPrice.getCurrency().getValue(), productPrice.getCurrency().getCode()));
         return product;
     }
 
@@ -92,7 +92,7 @@ public class ProductService {
         }
 
         LOGGER.info("Saving data to MongoDB: product = {}", product.getProductId());
-        productPrice.getCurrency().setValue(product.getCurrency().getValue());
+        productPrice.getCurrency().setValue(product.getMoney().getValue());
         return productPriceRepository.save(productPrice);
     }
 }

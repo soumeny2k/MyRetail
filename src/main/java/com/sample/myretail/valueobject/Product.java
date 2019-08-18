@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Product {
     private long productId;
     private String name;
-    private Currency currency;
+    private Money money;
 
     public long getProductId() {
         return productId;
@@ -30,12 +30,12 @@ public class Product {
     }
 
     @JsonProperty("current_price")
-    public Currency getCurrency() {
-        return currency;
+    public Money getMoney() {
+        return money;
     }
 
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
+    public void setMoney(Money money) {
+        this.money = money;
     }
 
     @Override
@@ -49,11 +49,11 @@ public class Product {
         Product product = (Product) o;
         return productId == product.productId &&
                 Objects.equals(name, product.name) &&
-                Objects.equals(currency, product.currency);
+                Objects.equals(money, product.money);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, name, currency);
+        return Objects.hash(productId, name, money);
     }
 }

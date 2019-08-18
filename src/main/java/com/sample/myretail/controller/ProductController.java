@@ -3,7 +3,7 @@ package com.sample.myretail.controller;
 import com.sample.myretail.domain.ProductPrice;
 import com.sample.myretail.exception.ProductNotFoundException;
 import com.sample.myretail.service.ProductService;
-import com.sample.myretail.valueobject.Currency;
+import com.sample.myretail.valueobject.Money;
 import com.sample.myretail.valueobject.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +68,7 @@ public class ProductController {
         try {
             final ProductPrice productPrice = productService.updateProduct(product);
             // update product price with latest value
-            product.setCurrency(new Currency(productPrice.getCurrency().getValue(), productPrice.getCurrency().getCode()));
+            product.setMoney(new Money(productPrice.getCurrency().getValue(), productPrice.getCurrency().getCode()));
             return ResponseEntity.ok(product);
         } catch (ProductNotFoundException pnfe) {
             LOGGER.error(pnfe.getMessage(), pnfe);
