@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -93,15 +92,5 @@ public class RedskyServiceTest {
 
         final ProductDetails productDetails = redskyService.getProduct(productId);
         assertEquals("Null product details", null, productDetails);
-    }
-
-    @Test
-    public void testGetProductNotFound() throws IOException {
-        when(restTemplate.getForEntity(anyString(), any(Class.class)))
-                .thenThrow(new RestClientResponseException("Mock exception", HttpStatus.NOT_FOUND.value(), "not found", null, null, null));
-        when(productConfig.getUrl(anyLong())).thenReturn("http://redsky.com");
-
-        //exceptionRule.expect(ProductException.class);
-        redskyService.getProduct(productId);
     }
 }
