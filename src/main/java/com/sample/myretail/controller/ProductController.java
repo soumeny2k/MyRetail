@@ -1,9 +1,10 @@
 package com.sample.myretail.controller;
 
+import com.sample.myretail.domain.Price;
 import com.sample.myretail.exception.ProductNotFoundException;
-import com.sample.myretail.repository.Product;
 import com.sample.myretail.service.ProductService;
-import com.sample.myretail.valueobject.ProductDetails;
+import com.sample.myretail.valueobject.Currency;
+import com.sample.myretail.valueobject.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,7 @@ public class ProductController {
      *         If any error occurred then it will return HTTP Status INTERNAL_SERVER_ERROR
      */
     @GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductDetails> get(@PathVariable Long id) {
+    public ResponseEntity<Product> get(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(productService.getProduct(id));
         } catch (ProductNotFoundException pnfe) {
@@ -54,21 +55,21 @@ public class ProductController {
      *  This service will take productId and product details and update the product rice in DB
      *
      * @param id product id
-     * @param productDetails product details
+     * @param product product details
      * @return If updated then details of the updated product with HTTP Status OK
      *         If the product not found then it will return HTTP Status NOT_FOUND
      *         If any error occurred then it will return HTTP Status INTERNAL_SERVER_ERROR
      */
     @PutMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductDetails> update(@PathVariable Long id, @RequestBody ProductDetails productDetails) {
-        if (id != productDetails.getId()) {
+    public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product) {
+        if (id != product.getId()) {
             throw new ResponseStatusException(BAD_REQUEST, "Product id does not match");
         }
         try {
-            final Product product = productService.updateProduct(productDetails);
+            final Price price = productService.updateProduct(product);
             // update product price with latest value
-            productDetails.setCurrent_price(new ProductDetails.CurrentPrice(product.getValue(), product.getCurrencyCode()));
-            return ResponseEntity.ok(productDetails);
+            product.setCurrency(new Currency(price.getMoney().getValue(), price.getMoney().getCurrencyCode()));
+            return ResponseEntity.ok(product);
         } catch (ProductNotFoundException pnfe) {
             LOGGER.error(pnfe.getMessage(), pnfe);
             throw new ResponseStatusException(NOT_FOUND, pnfe.getMessage());

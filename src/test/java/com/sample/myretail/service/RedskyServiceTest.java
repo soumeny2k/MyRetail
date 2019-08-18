@@ -2,7 +2,7 @@ package com.sample.myretail.service;
 
 import com.sample.myretail.MyRetailSpringConfigTest;
 import com.sample.myretail.config.MyRetailConfig;
-import com.sample.myretail.valueobject.ProductDetails;
+import com.sample.myretail.valueobject.Product;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -59,9 +59,9 @@ public class RedskyServiceTest {
                 .thenReturn(new ResponseEntity<>(json, HttpStatus.OK));
         when(productConfig.getUrl(anyLong())).thenReturn("http://redsky.com");
 
-        final ProductDetails productDetails = redskyService.getProduct(productId);
-        assertEquals("Product id match", productId, productDetails.getId());
-        assertEquals("Product name match", "The Big Lebowski (Blu-ray)", productDetails.getName());
+        final Product product = redskyService.getProduct(productId);
+        assertEquals("Product id match", productId, product.getId());
+        assertEquals("Product name match", "The Big Lebowski (Blu-ray)", product.getName());
     }
 
     @Test
@@ -76,8 +76,8 @@ public class RedskyServiceTest {
                 .thenReturn(new ResponseEntity<>(json, HttpStatus.OK));
         when(productConfig.getUrl(anyLong())).thenReturn("http://redsky.com");
 
-        final ProductDetails productDetails = redskyService.getProduct(productId);
-        assertEquals("Null product details", null, productDetails);
+        final Product product = redskyService.getProduct(productId);
+        assertEquals("Null product details", null, product);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class RedskyServiceTest {
                 .thenReturn(new ResponseEntity<>(json, HttpStatus.OK));
         when(productConfig.getUrl(anyLong())).thenReturn("http://redsky.com");
 
-        final ProductDetails productDetails = redskyService.getProduct(productId);
-        assertEquals("Null product details", null, productDetails);
+        final Product product = redskyService.getProduct(productId);
+        assertEquals("Null product details", null, product);
     }
 }

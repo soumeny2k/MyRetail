@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.sample.myretail.config.MyRetailConfig;
-import com.sample.myretail.valueobject.ProductDetails;
+import com.sample.myretail.valueobject.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +40,7 @@ public class RedskyService {
      * @throws IOException
      */
     @HystrixCommand(fallbackMethod = "defaultProductDetails")
-    public ProductDetails getProduct(long productId) throws IOException {
+    public Product getProduct(long productId) throws IOException {
         final String redSkyServiceUrl = productConfig.getUrl(productId);
         LOGGER.info("Redsky Service url = {}", redSkyServiceUrl);
         final ResponseEntity<String> productData = restTemplate.getForEntity(redSkyServiceUrl, String.class);
@@ -59,7 +59,7 @@ public class RedskyService {
         if (!item.hasNonNull("tcin")) {
             return null;
         }
-        final ProductDetails productDetails = new ProductDetails();
+        final Product productDetails = new Product();
         productDetails.setId(item.get("tcin").asLong());
 
         final JsonNode productDescription = item.get("product_description");
@@ -74,7 +74,7 @@ public class RedskyService {
      * @param productId product id
      * @return
      */
-    public ProductDetails defaultProductDetails(long productId) {
+    public Product defaultProductDetails(long productId) {
         LOGGER.error("Fetching product details from Redsky service failed, falling back to hystrix default: product={}", productId);
         return null;
     }

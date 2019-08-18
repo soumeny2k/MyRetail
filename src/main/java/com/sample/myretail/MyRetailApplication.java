@@ -2,7 +2,8 @@ package com.sample.myretail;
 
 import com.google.common.base.Predicates;
 import com.sample.myretail.config.MyRetailConfig;
-import com.sample.myretail.repository.Product;
+import com.sample.myretail.domain.Money;
+import com.sample.myretail.domain.Price;
 import com.sample.myretail.repository.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -26,6 +27,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +40,7 @@ import java.util.stream.Collectors;
 @EnableCircuitBreaker
 @EnableCaching
 @EnableSwagger2
+@SuppressWarnings("PMD.ExcessiveImports")
 public class MyRetailApplication {
 
     private static final String CURRENCY_CODE = "USD";
@@ -66,16 +69,18 @@ public class MyRetailApplication {
                 {15643793L, 86.345, CURRENCY_CODE}
         };
 
-        final List<Product> products = Arrays.stream(data)
-                .map(array -> new Product(
+        final List<Price> prices = Arrays.stream(data)
+                .map(array -> new Price(
                         (long) array[0],
-                        (double) array[1],
-                        (String) array[2]
+                        new Money(
+                                BigDecimal.valueOf((double) array[1]),
+                                (String) array[2]
                         ))
+                )
                 .collect(Collectors.toList());
 
         productRepository.deleteAll();
-        productRepository.saveAll(products);
+        productRepository.saveAll(prices);
     }
 
     @Bean

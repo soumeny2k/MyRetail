@@ -3,10 +3,11 @@ package com.sample.myretail.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoClientException;
 import com.sample.myretail.MyRetailSpringConfigTest;
-import com.sample.myretail.repository.Product;
+import com.sample.myretail.domain.Money;
+import com.sample.myretail.domain.Price;
 import com.sample.myretail.repository.ProductRepository;
 import com.sample.myretail.service.RedskyService;
-import com.sample.myretail.valueobject.ProductDetails;
+import com.sample.myretail.valueobject.Product;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +19,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.client.RestClientException;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -48,18 +47,20 @@ public class ProductControllerGetTest {
 
     @Test
     public void testSuccess() throws Exception {
-        final ProductDetails productDetails = new ProductDetails();
-        productDetails.setId(productId);
-        productDetails.setName("Test product");
-
-        when(redskyService.getProduct(anyLong()))
-                .thenReturn(productDetails);
-
         final Product product = new Product();
         product.setId(productId);
-        product.setValue(18.98);
-        product.setCurrencyCode("USD");
-        Optional<Product> optionalProduct = Optional.of(product);
+        product.setName("Test product");
+
+        when(redskyService.getProduct(anyLong()))
+                .thenReturn(product);
+
+        final Price price = new Price();
+        price.setId(productId);
+        final Money money = new Money();
+        money.setValue(BigDecimal.valueOf(18.98));
+        money.setCurrencyCode("USD");
+        price.setMoney(money);
+        Optional<Price> optionalProduct = Optional.of(price);
 
         when(productRepository.findById(anyLong()))
                 .thenReturn(optionalProduct);
@@ -68,9 +69,9 @@ public class ProductControllerGetTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        final ProductDetails resultProduct = MAPPER.readValue(result.getResponse().getContentAsString(), ProductDetails.class);
-        assertEquals("Product value match", 18.98, resultProduct.getCurrent_price().getValue(), 0.0);
-        assertEquals("Currency code match", "USD", resultProduct.getCurrent_price().getCurrency_code());
+        final Product resultProduct = MAPPER.readValue(result.getResponse().getContentAsString(), Product.class);
+        assertEquals("Product value match", 18.98, resultProduct.getCurrency().getValue().doubleValue(), 0.0);
+        assertEquals("Currency code match", "USD", resultProduct.getCurrency().getCode());
     }
 
     @Test
@@ -78,11 +79,14 @@ public class ProductControllerGetTest {
         when(redskyService.getProduct(anyLong()))
                 .thenThrow(new RestClientException("Service not available"));
 
-        final Product product = new Product();
-        product.setId(productId);
-        product.setValue(18.98);
-        product.setCurrencyCode("USD");
-        Optional<Product> optionalProduct = Optional.of(product);
+        final Price price = new Price();
+        price.setId(productId);
+        price.setId(productId);
+        final Money money = new Money();
+        money.setValue(BigDecimal.valueOf(18.98));
+        money.setCurrencyCode("USD");
+        price.setMoney(money);
+        Optional<Price> optionalProduct = Optional.of(price);
 
         when(productRepository.findById(anyLong()))
                 .thenReturn(optionalProduct);
@@ -104,12 +108,12 @@ public class ProductControllerGetTest {
 
     @Test
     public void testMongoServiceIsDown() throws Exception {
-        final ProductDetails productDetails = new ProductDetails();
-        productDetails.setId(productId);
-        productDetails.setName("Test product");
+        final Product product = new Product();
+        product.setId(productId);
+        product.setName("Test product");
 
         when(redskyService.getProduct(anyLong()))
-                .thenReturn(productDetails);
+                .thenReturn(product);
 
         when(productRepository.findById(anyLong()))
                 .thenThrow(new MongoClientException("Mongo service is down"));
