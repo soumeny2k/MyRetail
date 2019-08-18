@@ -56,6 +56,8 @@ Below command will run application using docker compose. This will run both Mong
 
 ```docker-compose up```
 
+```docker-compose up --build``` (perform docker build also)
+
 # Test:
 To test API using Swagger UI access below url when application is successfully started.
 

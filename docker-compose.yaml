@@ -8,6 +8,7 @@ services:
       - spring_data_mongodb_port=27017
       - spring_data_mongodb_database=myretail
       - myretail_product_url=https://redsky.target.com/v2/pdp/tcin/%d?excludes=taxonomy,price,promotion,bulk_ship,rating_and_review_reviews,rating_and_review_statistics,question_answer_statistics
+      - myretail_product_timeout=20000
     depends_on:
       - mongodb
     ports:

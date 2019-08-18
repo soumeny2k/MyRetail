@@ -1,4 +1,4 @@
-package com.sample.myretail.config;
+package com.casestudy.myretail.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

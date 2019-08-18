@@ -46,7 +46,7 @@ jacocoTestCoverageVerification {
         rule {
             limit {
                 counter = 'METHOD'
-                minimum = 0.8
+                minimum = 0.7
             }
         }
         rule {

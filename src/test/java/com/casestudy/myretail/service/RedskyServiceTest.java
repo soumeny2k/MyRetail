@@ -1,8 +1,8 @@
-package com.sample.myretail.service;
+package com.casestudy.myretail.service;
 
-import com.sample.myretail.MyRetailSpringConfigTest;
-import com.sample.myretail.config.MyRetailConfig;
-import com.sample.myretail.valueobject.Product;
+import com.casestudy.myretail.MyRetailSpringConfigTest;
+import com.casestudy.myretail.config.MyRetailConfig;
+import com.casestudy.myretail.valueobject.Product;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -60,7 +60,7 @@ public class RedskyServiceTest {
         when(productConfig.getUrl(anyLong())).thenReturn("http://redsky.com");
 
         final Product product = redskyService.getProduct(productId);
-        assertEquals("Product id match", productId, product.getId());
+        assertEquals("Product id match", productId, product.getProductId());
         assertEquals("Product name match", "The Big Lebowski (Blu-ray)", product.getName());
     }
 

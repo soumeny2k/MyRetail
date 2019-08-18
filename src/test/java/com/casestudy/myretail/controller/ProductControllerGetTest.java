@@ -1,13 +1,13 @@
-package com.sample.myretail.controller;
+package com.casestudy.myretail.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.MongoClientException;
-import com.sample.myretail.MyRetailSpringConfigTest;
-import com.sample.myretail.domain.Money;
-import com.sample.myretail.domain.Price;
-import com.sample.myretail.repository.ProductRepository;
-import com.sample.myretail.service.RedskyService;
-import com.sample.myretail.valueobject.Product;
+import com.casestudy.myretail.MyRetailSpringConfigTest;
+import com.casestudy.myretail.entity.Currency;
+import com.casestudy.myretail.entity.ProductPrice;
+import com.casestudy.myretail.repository.ProductPriceRepository;
+import com.casestudy.myretail.service.RedskyService;
+import com.casestudy.myretail.valueobject.Product;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class ProductControllerGetTest {
     private MockMvc mockMvc;
 
     @MockBean(name = "productRepository")
-    private ProductRepository productRepository;
+    private ProductPriceRepository productPriceRepository;
 
     @MockBean
     private RedskyService redskyService;
@@ -48,21 +48,21 @@ public class ProductControllerGetTest {
     @Test
     public void testSuccess() throws Exception {
         final Product product = new Product();
-        product.setId(productId);
+        product.setProductId(productId);
         product.setName("Test product");
 
         when(redskyService.getProduct(anyLong()))
                 .thenReturn(product);
 
-        final Price price = new Price();
-        price.setId(productId);
-        final Money money = new Money();
-        money.setValue(BigDecimal.valueOf(18.98));
-        money.setCurrencyCode("USD");
-        price.setMoney(money);
-        Optional<Price> optionalProduct = Optional.of(price);
+        final ProductPrice productPrice = new ProductPrice();
+        productPrice.setProductId(productId);
+        final Currency currency = new Currency();
+        currency.setValue(BigDecimal.valueOf(18.98));
+        currency.setCode("USD");
+        productPrice.setCurrency(currency);
+        Optional<ProductPrice> optionalProduct = Optional.of(productPrice);
 
-        when(productRepository.findById(anyLong()))
+        when(productPriceRepository.findById(anyLong()))
                 .thenReturn(optionalProduct);
 
         final MvcResult result = mockMvc.perform(get("/products/" + productId))
@@ -70,8 +70,8 @@ public class ProductControllerGetTest {
                 .andReturn();
 
         final Product resultProduct = MAPPER.readValue(result.getResponse().getContentAsString(), Product.class);
-        assertEquals("Product value match", 18.98, resultProduct.getCurrency().getValue().doubleValue(), 0.0);
-        assertEquals("Currency code match", "USD", resultProduct.getCurrency().getCode());
+        assertEquals("Product value match", 18.98, resultProduct.getMoney().getValue().doubleValue(), 0.0);
+        assertEquals("Currency code match", "USD", resultProduct.getMoney().getCode());
     }
 
     @Test
@@ -79,16 +79,15 @@ public class ProductControllerGetTest {
         when(redskyService.getProduct(anyLong()))
                 .thenThrow(new RestClientException("Service not available"));
 
-        final Price price = new Price();
-        price.setId(productId);
-        price.setId(productId);
-        final Money money = new Money();
-        money.setValue(BigDecimal.valueOf(18.98));
-        money.setCurrencyCode("USD");
-        price.setMoney(money);
-        Optional<Price> optionalProduct = Optional.of(price);
+        final ProductPrice productPrice = new ProductPrice();
+        productPrice.setProductId(productId);
+        final Currency currency = new Currency();
+        currency.setValue(BigDecimal.valueOf(18.98));
+        currency.setCode("USD");
+        productPrice.setCurrency(currency);
+        Optional<ProductPrice> optionalProduct = Optional.of(productPrice);
 
-        when(productRepository.findById(anyLong()))
+        when(productPriceRepository.findById(anyLong()))
                 .thenReturn(optionalProduct);
 
         mockMvc.perform(get("/products/" + productId))
@@ -109,13 +108,13 @@ public class ProductControllerGetTest {
     @Test
     public void testMongoServiceIsDown() throws Exception {
         final Product product = new Product();
-        product.setId(productId);
+        product.setProductId(productId);
         product.setName("Test product");
 
         when(redskyService.getProduct(anyLong()))
                 .thenReturn(product);
 
-        when(productRepository.findById(anyLong()))
+        when(productPriceRepository.findById(anyLong()))
                 .thenThrow(new MongoClientException("Mongo service is down"));
 
         mockMvc.perform(get("/products/" + productId))

@@ -1,12 +1,12 @@
-package com.sample.myretail.controller;
+package com.casestudy.myretail.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sample.myretail.MyRetailSpringConfigTest;
-import com.sample.myretail.domain.Money;
-import com.sample.myretail.domain.Price;
-import com.sample.myretail.repository.ProductRepository;
-import com.sample.myretail.valueobject.Currency;
-import com.sample.myretail.valueobject.Product;
+import com.casestudy.myretail.MyRetailSpringConfigTest;
+import com.casestudy.myretail.entity.Currency;
+import com.casestudy.myretail.entity.ProductPrice;
+import com.casestudy.myretail.repository.ProductPriceRepository;
+import com.casestudy.myretail.valueobject.Money;
+import com.casestudy.myretail.valueobject.Product;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,33 +40,32 @@ public class ProductControllerUpdateTest {
     private MockMvc mockMvc;
 
     @MockBean(name = "productRepository")
-    private ProductRepository productRepository;
+    private ProductPriceRepository productPriceRepository;
 
     @Test
     public void testSuccess() throws Exception {
-        final Price price = new Price();
-        price.setId(productId);
-        price.setId(productId);
-        final Money money = new Money();
-        money.setValue(BigDecimal.valueOf(18.98));
-        money.setCurrencyCode("USD");
-        price.setMoney(money);
-        Optional<Price> optionalProduct = Optional.of(price);
+        final ProductPrice productPrice = new ProductPrice();
+        productPrice.setProductId(productId);
+        final Currency currency = new Currency();
+        currency.setValue(BigDecimal.valueOf(18.98));
+        currency.setCode("USD");
+        productPrice.setCurrency(currency);
+        Optional<ProductPrice> optionalProduct = Optional.of(productPrice);
 
-        when(productRepository.findById(anyLong()))
+        when(productPriceRepository.findById(anyLong()))
                 .thenReturn(optionalProduct);
 
         final Product product = new Product();
-        product.setId(productId);
+        product.setProductId(productId);
         product.setName("Test product");
-        product.setCurrency(new Currency(BigDecimal.valueOf(100.98), "USD"));
+        product.setMoney(new Money(BigDecimal.valueOf(100.98), "USD"));
 
-        final Price updatedPrice = new Price();
-        updatedPrice.setId(productId);
-        updatedPrice.setMoney(new Money(product.getCurrency().getValue(), product.getCurrency().getCode()));
+        final ProductPrice updatedProductPrice = new ProductPrice();
+        updatedProductPrice.setProductId(productId);
+        updatedProductPrice.setCurrency(new Currency(product.getMoney().getValue(), product.getMoney().getCode()));
 
-        when(productRepository.save(any(Price.class)))
-                .thenReturn(updatedPrice);
+        when(productPriceRepository.save(any(ProductPrice.class)))
+                .thenReturn(updatedProductPrice);
 
         final MvcResult result = mockMvc.perform(put("/products/" + productId)
                 .contentType(APPLICATION_JSON)
@@ -76,16 +75,16 @@ public class ProductControllerUpdateTest {
                 .andReturn();
 
         final Product resultProduct = MAPPER.readValue(result.getResponse().getContentAsString(), Product.class);
-        assertEquals("Product value match", product.getCurrency().getValue().doubleValue(), resultProduct.getCurrency().getValue().doubleValue(), 0.0);
-        assertEquals("Currency code match", "USD", resultProduct.getCurrency().getCode());
+        assertEquals("Product value match", product.getMoney().getValue().doubleValue(), resultProduct.getMoney().getValue().doubleValue(), 0.0);
+        assertEquals("Currency code match", "USD", resultProduct.getMoney().getCode());
     }
 
     @Test
     public void testDoesNotMatch() throws Exception {
         final Product product = new Product();
-        product.setId(123456L);
+        product.setProductId(123456L);
         product.setName("Test product");
-        product.setCurrency(new Currency(BigDecimal.valueOf(100.98), "USD"));
+        product.setMoney(new Money(BigDecimal.valueOf(100.98), "USD"));
 
         mockMvc.perform(put("/products/" + productId)
                 .contentType(APPLICATION_JSON)
@@ -97,13 +96,13 @@ public class ProductControllerUpdateTest {
 
     @Test
     public void testProductNotFound() throws Exception {
-        when(productRepository.findById(anyLong()))
+        when(productPriceRepository.findById(anyLong()))
                 .thenReturn(Optional.empty());
 
         final Product product = new Product();
-        product.setId(productId);
+        product.setProductId(productId);
         product.setName("Test product");
-        product.setCurrency(new Currency(BigDecimal.valueOf(100.98), "USD"));
+        product.setMoney(new Money(BigDecimal.valueOf(100.98), "USD"));
 
         mockMvc.perform(put("/products/" + productId)
                 .contentType(APPLICATION_JSON)
