@@ -25,7 +25,7 @@ public class Currency {
         this.value = value;
     }
 
-    @JsonProperty("currency123_code")
+    @JsonProperty("currency_code")
     public String getCode() {
         return code;
     }
