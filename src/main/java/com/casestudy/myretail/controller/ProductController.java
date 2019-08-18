@@ -91,7 +91,7 @@ public class ProductController {
         if (id != product.getProductId()) {
             msg = "Product id does not match";
             isValid = false;
-        } else if (product.getMoney().getValue().compareTo(BigDecimal.ZERO) < 0) {
+        } else if (product.getMoney().getValue().compareTo(BigDecimal.ZERO) <= 0) {
             msg = "Product price should be greater than 0";
             isValid = false;
         }
