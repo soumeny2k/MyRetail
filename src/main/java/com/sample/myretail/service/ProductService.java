@@ -1,8 +1,8 @@
 package com.sample.myretail.service;
 
-import com.sample.myretail.domain.Price;
+import com.sample.myretail.domain.ProductPrice;
 import com.sample.myretail.exception.ProductNotFoundException;
-import com.sample.myretail.repository.ProductRepository;
+import com.sample.myretail.repository.ProductPriceRepository;
 import com.sample.myretail.valueobject.Currency;
 import com.sample.myretail.valueobject.Product;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ public class ProductService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductService.class);
     private static final String PRODUCT_NOT_FOUND_MSG = "Product not found: product = ";
 
-    private final ProductRepository productRepository;
+    private final ProductPriceRepository productPriceRepository;
     private final RedskyService redskyService;
 
     /**
@@ -31,9 +31,9 @@ public class ProductService {
     @Resource
     private ProductService self;
 
-    public ProductService(ProductRepository productRepository,
+    public ProductService(ProductPriceRepository productPriceRepository,
                           RedskyService redskyService) {
-        this.productRepository = productRepository;
+        this.productPriceRepository = productPriceRepository;
         this.redskyService = redskyService;
     }
 
@@ -54,8 +54,8 @@ public class ProductService {
         }
 
         // Fetch data from Mongo
-        final Price price = self.fetchProduct(productId);
-        product.setCurrency(new Currency(price.getMoney().getValue(), price.getMoney().getCurrencyCode()));
+        final ProductPrice productPrice = self.fetchProduct(productId);
+        product.setCurrency(new Currency(productPrice.getCurrency().getValue(), productPrice.getCurrency().getCode()));
         return product;
     }
 
@@ -68,8 +68,8 @@ public class ProductService {
      * @return product details
      */
     @Cacheable(value = "products")
-    public Price fetchProduct(long productId) {
-        final Optional<Price> productOptional = productRepository.findById(productId);
+    public ProductPrice fetchProduct(long productId) {
+        final Optional<ProductPrice> productOptional = productPriceRepository.findById(productId);
         if (!productOptional.isPresent()) {
             throw new ProductNotFoundException(PRODUCT_NOT_FOUND_MSG + productId);
         }
@@ -84,15 +84,15 @@ public class ProductService {
      * @param product product details
      * @return Updated produce details
      */
-    @CachePut(value = "products", key = "#product.id")
-    public Price updateProduct(Product product) {
-        final Price price = self.fetchProduct(product.getId());
-        if (price == null) {
-            throw new ProductNotFoundException(PRODUCT_NOT_FOUND_MSG + product.getId());
+    @CachePut(value = "products", key = "#product.productId")
+    public ProductPrice updateProduct(Product product) {
+        final ProductPrice productPrice = self.fetchProduct(product.getProductId());
+        if (productPrice == null) {
+            throw new ProductNotFoundException(PRODUCT_NOT_FOUND_MSG + product.getProductId());
         }
 
-        LOGGER.info("Saving data to MongoDB: product = {}", product.getId());
-        price.getMoney().setValue(product.getCurrency().getValue());
-        return productRepository.save(price);
+        LOGGER.info("Saving data to MongoDB: product = {}", product.getProductId());
+        productPrice.getCurrency().setValue(product.getCurrency().getValue());
+        return productPriceRepository.save(productPrice);
     }
 }

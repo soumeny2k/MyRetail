@@ -2,10 +2,9 @@ package com.sample.myretail.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sample.myretail.MyRetailSpringConfigTest;
-import com.sample.myretail.domain.Money;
-import com.sample.myretail.domain.Price;
-import com.sample.myretail.repository.ProductRepository;
-import com.sample.myretail.valueobject.Currency;
+import com.sample.myretail.domain.Currency;
+import com.sample.myretail.domain.ProductPrice;
+import com.sample.myretail.repository.ProductPriceRepository;
 import com.sample.myretail.valueobject.Product;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,33 +39,32 @@ public class ProductControllerUpdateTest {
     private MockMvc mockMvc;
 
     @MockBean(name = "productRepository")
-    private ProductRepository productRepository;
+    private ProductPriceRepository productPriceRepository;
 
     @Test
     public void testSuccess() throws Exception {
-        final Price price = new Price();
-        price.setId(productId);
-        price.setId(productId);
-        final Money money = new Money();
-        money.setValue(BigDecimal.valueOf(18.98));
-        money.setCurrencyCode("USD");
-        price.setMoney(money);
-        Optional<Price> optionalProduct = Optional.of(price);
+        final ProductPrice productPrice = new ProductPrice();
+        productPrice.setProductId(productId);
+        final Currency currency = new Currency();
+        currency.setValue(BigDecimal.valueOf(18.98));
+        currency.setCode("USD");
+        productPrice.setCurrency(currency);
+        Optional<ProductPrice> optionalProduct = Optional.of(productPrice);
 
-        when(productRepository.findById(anyLong()))
+        when(productPriceRepository.findById(anyLong()))
                 .thenReturn(optionalProduct);
 
         final Product product = new Product();
-        product.setId(productId);
+        product.setProductId(productId);
         product.setName("Test product");
-        product.setCurrency(new Currency(BigDecimal.valueOf(100.98), "USD"));
+        product.setCurrency(new com.sample.myretail.valueobject.Currency(BigDecimal.valueOf(100.98), "USD"));
 
-        final Price updatedPrice = new Price();
-        updatedPrice.setId(productId);
-        updatedPrice.setMoney(new Money(product.getCurrency().getValue(), product.getCurrency().getCode()));
+        final ProductPrice updatedProductPrice = new ProductPrice();
+        updatedProductPrice.setProductId(productId);
+        updatedProductPrice.setCurrency(new Currency(product.getCurrency().getValue(), product.getCurrency().getCode()));
 
-        when(productRepository.save(any(Price.class)))
-                .thenReturn(updatedPrice);
+        when(productPriceRepository.save(any(ProductPrice.class)))
+                .thenReturn(updatedProductPrice);
 
         final MvcResult result = mockMvc.perform(put("/products/" + productId)
                 .contentType(APPLICATION_JSON)
@@ -83,9 +81,9 @@ public class ProductControllerUpdateTest {
     @Test
     public void testDoesNotMatch() throws Exception {
         final Product product = new Product();
-        product.setId(123456L);
+        product.setProductId(123456L);
         product.setName("Test product");
-        product.setCurrency(new Currency(BigDecimal.valueOf(100.98), "USD"));
+        product.setCurrency(new com.sample.myretail.valueobject.Currency(BigDecimal.valueOf(100.98), "USD"));
 
         mockMvc.perform(put("/products/" + productId)
                 .contentType(APPLICATION_JSON)
@@ -97,13 +95,13 @@ public class ProductControllerUpdateTest {
 
     @Test
     public void testProductNotFound() throws Exception {
-        when(productRepository.findById(anyLong()))
+        when(productPriceRepository.findById(anyLong()))
                 .thenReturn(Optional.empty());
 
         final Product product = new Product();
-        product.setId(productId);
+        product.setProductId(productId);
         product.setName("Test product");
-        product.setCurrency(new Currency(BigDecimal.valueOf(100.98), "USD"));
+        product.setCurrency(new com.sample.myretail.valueobject.Currency(BigDecimal.valueOf(100.98), "USD"));
 
         mockMvc.perform(put("/products/" + productId)
                 .contentType(APPLICATION_JSON)

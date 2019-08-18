@@ -1,20 +1,19 @@
-package com.sample.myretail.valueobject;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package com.sample.myretail.domain;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Currency {
+
     private BigDecimal value;
     private String code;
 
     public Currency() {
-        // This is needed
+        // in case want to use setter
     }
 
     public Currency(BigDecimal value, String code) {
-        this.value = value;
+        this.value= value;
         this.code = code;
     }
 
@@ -26,7 +25,6 @@ public class Currency {
         this.value = value;
     }
 
-    @JsonProperty("currency_code")
     public String getCode() {
         return code;
     }
@@ -40,6 +38,7 @@ public class Currency {
         if (this == o) {
             return true;
         }
+
         if (!(o instanceof Currency)) {
             return false;
         }

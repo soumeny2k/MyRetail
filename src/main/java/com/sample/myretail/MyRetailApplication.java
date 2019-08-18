@@ -2,9 +2,9 @@ package com.sample.myretail;
 
 import com.google.common.base.Predicates;
 import com.sample.myretail.config.MyRetailConfig;
-import com.sample.myretail.domain.Money;
-import com.sample.myretail.domain.Price;
-import com.sample.myretail.repository.ProductRepository;
+import com.sample.myretail.domain.Currency;
+import com.sample.myretail.domain.ProductPrice;
+import com.sample.myretail.repository.ProductPriceRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -50,15 +50,15 @@ public class MyRetailApplication {
     }
 
     @Bean
-    CommandLineRunner init(ProductRepository productRepository) {
-        return args -> populateData(productRepository);
+    CommandLineRunner init(ProductPriceRepository productPriceRepository) {
+        return args -> populateData(productPriceRepository);
     }
 
     /**
      * This method will insert all the data that needs to put in MongoDB
-     * @param productRepository bean reference
+     * @param productPriceRepository bean reference
      */
-    private void populateData(ProductRepository productRepository) {
+    private void populateData(ProductPriceRepository productPriceRepository) {
 
         Object[][] data = {
                 {13860428L, 18.87, CURRENCY_CODE},
@@ -69,18 +69,18 @@ public class MyRetailApplication {
                 {15643793L, 86.345, CURRENCY_CODE}
         };
 
-        final List<Price> prices = Arrays.stream(data)
-                .map(array -> new Price(
+        final List<ProductPrice> productPrices = Arrays.stream(data)
+                .map(array -> new ProductPrice(
                         (long) array[0],
-                        new Money(
+                        new Currency(
                                 BigDecimal.valueOf((double) array[1]),
                                 (String) array[2]
                         ))
                 )
                 .collect(Collectors.toList());
 
-        productRepository.deleteAll();
-        productRepository.saveAll(prices);
+        productPriceRepository.deleteAll();
+        productPriceRepository.saveAll(productPrices);
     }
 
     @Bean

@@ -60,7 +60,7 @@ public class RedskyService {
             return null;
         }
         final Product productDetails = new Product();
-        productDetails.setId(item.get("tcin").asLong());
+        productDetails.setProductId(item.get("tcin").asLong());
 
         final JsonNode productDescription = item.get("product_description");
         productDetails.setName(productDescription.get("title").asText());

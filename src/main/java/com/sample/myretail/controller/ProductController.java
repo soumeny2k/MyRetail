@@ -1,6 +1,6 @@
 package com.sample.myretail.controller;
 
-import com.sample.myretail.domain.Price;
+import com.sample.myretail.domain.ProductPrice;
 import com.sample.myretail.exception.ProductNotFoundException;
 import com.sample.myretail.service.ProductService;
 import com.sample.myretail.valueobject.Currency;
@@ -62,13 +62,13 @@ public class ProductController {
      */
     @PutMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Product> update(@PathVariable Long id, @RequestBody Product product) {
-        if (id != product.getId()) {
+        if (id != product.getProductId()) {
             throw new ResponseStatusException(BAD_REQUEST, "Product id does not match");
         }
         try {
-            final Price price = productService.updateProduct(product);
+            final ProductPrice productPrice = productService.updateProduct(product);
             // update product price with latest value
-            product.setCurrency(new Currency(price.getMoney().getValue(), price.getMoney().getCurrencyCode()));
+            product.setCurrency(new Currency(productPrice.getCurrency().getValue(), productPrice.getCurrency().getCode()));
             return ResponseEntity.ok(product);
         } catch (ProductNotFoundException pnfe) {
             LOGGER.error(pnfe.getMessage(), pnfe);
