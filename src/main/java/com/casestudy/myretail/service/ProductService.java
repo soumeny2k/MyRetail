@@ -84,7 +84,7 @@ public class ProductService {
      * @param product product details
      * @return Updated produce details
      */
-    @CachePut(value = "products", key = "#product.productId")
+    @CachePut(value = "products", key = "#product.id")
     public ProductPrice updateProduct(Product product) {
         final ProductPrice productPrice = self.fetchProduct(product.getId());
         if (productPrice == null) {
