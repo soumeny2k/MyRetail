@@ -56,7 +56,7 @@ public class ProductControllerUpdateTest {
                 .thenReturn(optionalProduct);
 
         final Product product = new Product();
-        product.setProductId(productId);
+        product.setId(productId);
         product.setName("Test product");
         product.setMoney(new Money(BigDecimal.valueOf(100.98), "USD"));
 
@@ -82,7 +82,7 @@ public class ProductControllerUpdateTest {
     @Test
     public void testDoesNotMatch() throws Exception {
         final Product product = new Product();
-        product.setProductId(123456L);
+        product.setId(123456L);
         product.setName("Test product");
         product.setMoney(new Money(BigDecimal.valueOf(100.98), "USD"));
 
@@ -100,7 +100,7 @@ public class ProductControllerUpdateTest {
                 .thenReturn(Optional.empty());
 
         final Product product = new Product();
-        product.setProductId(productId);
+        product.setId(productId);
         product.setName("Test product");
         product.setMoney(new Money(BigDecimal.valueOf(100.98), "USD"));
 

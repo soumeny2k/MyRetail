@@ -48,7 +48,7 @@ public class ProductControllerGetTest {
     @Test
     public void testSuccess() throws Exception {
         final Product product = new Product();
-        product.setProductId(productId);
+        product.setId(productId);
         product.setName("Test product");
 
         when(redskyService.getProduct(anyLong()))
@@ -108,7 +108,7 @@ public class ProductControllerGetTest {
     @Test
     public void testMongoServiceIsDown() throws Exception {
         final Product product = new Product();
-        product.setProductId(productId);
+        product.setId(productId);
         product.setName("Test product");
 
         when(redskyService.getProduct(anyLong()))
