@@ -9,16 +9,16 @@ import java.util.Objects;
  */
 @SuppressWarnings({"PMD.VariableNamingConventions", "PMD.MethodNamingConventions"})
 public class Product {
-    private long productId;
+    private long id;
     private String name;
     private Money money;
 
-    public long getProductId() {
-        return productId;
+    public long getId() {
+        return id;
     }
 
-    public void setProductId(long productId) {
-        this.productId = productId;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -47,13 +47,13 @@ public class Product {
             return false;
         }
         Product product = (Product) o;
-        return productId == product.productId &&
+        return id == product.id &&
                 Objects.equals(name, product.name) &&
                 Objects.equals(money, product.money);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, name, money);
+        return Objects.hash(id, name, money);
     }
 }

@@ -88,7 +88,7 @@ public class ProductController {
     private void validate(Long id, Product product) {
         boolean isValid = true;
         String msg = null;
-        if (id != product.getProductId()) {
+        if (id != product.getId()) {
             msg = "Product id does not match";
             isValid = false;
         } else if (product.getMoney().getValue().compareTo(BigDecimal.ZERO) <= 0) {

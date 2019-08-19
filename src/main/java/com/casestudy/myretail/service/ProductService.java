@@ -86,12 +86,12 @@ public class ProductService {
      */
     @CachePut(value = "products", key = "#product.productId")
     public ProductPrice updateProduct(Product product) {
-        final ProductPrice productPrice = self.fetchProduct(product.getProductId());
+        final ProductPrice productPrice = self.fetchProduct(product.getId());
         if (productPrice == null) {
-            throw new ProductNotFoundException(PRODUCT_NOT_FOUND_MSG + product.getProductId());
+            throw new ProductNotFoundException(PRODUCT_NOT_FOUND_MSG + product.getId());
         }
 
-        LOGGER.info("Saving data to MongoDB: product = {}", product.getProductId());
+        LOGGER.info("Saving data to MongoDB: product = {}", product.getId());
         productPrice.getCurrency().setValue(product.getMoney().getValue());
         return productPriceRepository.save(productPrice);
     }

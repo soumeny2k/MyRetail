@@ -60,7 +60,7 @@ public class RedskyServiceTest {
         when(productConfig.getUrl(anyLong())).thenReturn("http://redsky.com");
 
         final Product product = redskyService.getProduct(productId);
-        assertEquals("Product id match", productId, product.getProductId());
+        assertEquals("Product id match", productId, product.getId());
         assertEquals("Product name match", "The Big Lebowski (Blu-ray)", product.getName());
     }
 
