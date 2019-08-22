@@ -5,6 +5,7 @@ import com.casestudy.myretail.config.MyRetailConfig;
 import com.casestudy.myretail.entity.Currency;
 import com.casestudy.myretail.entity.ProductPrice;
 import com.casestudy.myretail.repository.ProductPriceRepository;
+import com.netflix.config.ConfigurationManager;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -51,6 +52,7 @@ public class MyRetailApplication {
 
     @Bean
     CommandLineRunner init(ProductPriceRepository productPriceRepository) {
+        ConfigurationManager.getConfigInstance().setProperty("hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds", 20000);
         return args -> populateData(productPriceRepository);
     }
 
